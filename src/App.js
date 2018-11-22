@@ -63,7 +63,7 @@ class App extends Component {
           <h1>Best Views Seattle Map</h1>
         </div>
 
-        // <div className="container">
+        <div className="container">
 
         {/* <ListView
           markers={this.state.markers}
@@ -78,10 +78,17 @@ class App extends Component {
           initialCenter={initialCenter}
           markers={this.state.markers}
           zoom={zoom}
+          // ListView props
+          markers={this.state.markers}
+          onItemClick={this.onMarkerClick}
+          buttonOneOnClick={this.showAll}
+          buttonOneText={buttonOneText}
+          buttonTwoOnClick={this.showNorthOfCal}
+          buttonTwoText= {buttonTwoText}
         />
         </div>
 
-      // </div>
+      </div>
 
     );
   }

@@ -2,22 +2,40 @@ import React, { Component } from 'react'
 
 class ListView extends Component {
     
+    state = {
+        markers: null
+    }
+
+    showInfoWindowFromList = (prop, marker) => {
+        this.props.onClickLI(prop, marker)
+    }
     // Consulted for creating and adding new LI: https://www.w3schools.com/jsref/met_node_appendchild.asp
     // Code for clearing list: https://stackoverflow.com/a/27324794
     populateList = () => {
         const listViewList = document.getElementById('list-view-list')
         listViewList.innerHTML = ''
+        let associatedMarkers = this.props.associatedMarkers
+        let associatedMarkerProps = this.props.associatedMarkerProps
+        let clickLI = this.props.onClickLI
+        let i = 0;
         this.props.markers.forEach(marker => {
             const newLI = document.createElement('li')
             newLI.innerHTML = marker.name;
-            newLI.addEventListener('click', function() {
-                const associatedMarker = document.getElementById(marker.name)
-                console.log(associatedMarker)
-                associatedMarker.click();
-            });
+            if (Array.isArray(associatedMarkers)) {
+                let associatedMarker = associatedMarkers[i]
+                let associatedMarkerProp = associatedMarkerProps[i]
+                newLI.addEventListener('click', function() {
+                    clickLI(associatedMarkerProp, associatedMarker)
+                })
+            }
             document.getElementById('list-view-list').appendChild(newLI)
+            i++
         })
     }
+
+    // componentDidMount() {
+    //     this.populateList();
+    // }
 
     componentDidUpdate() {
         this.populateList();
@@ -40,7 +58,7 @@ class ListView extends Component {
 
                 </ul>
                 <ul id="list-view-list">
-                {/* An appropriately filtered list of our locations will go here when the `.populateList()` method is invoked.
+                {/* An appropriately filtered list of our locations will go here whenever the `.populateList()` method is invoked.
                 */}
                 </ul>
             </div>

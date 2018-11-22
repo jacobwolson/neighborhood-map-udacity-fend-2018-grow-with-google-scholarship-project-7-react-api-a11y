@@ -1,0 +1,29 @@
+newLI.addEventListener('click', function() {
+                let associatedMarker = document.getElementById('gmimap' + i)
+                console.log(associatedMarker)
+                associatedMarker.click();
+            });
+
+---------------------------------------------
+
+{/* {this.props.markers.map((marker, i) => {
+          return(
+            <Marker
+              key={i}
+              onClick={this.onMarkerClick}
+              name={marker.name}
+              position={marker.coordinates}
+            />
+          )
+        })} */}
+
+        {/* {this.makeMarkers(this.props.markers)} */}
+
+--------------------------------------------------------------------
+
+  // this.props.onClickLI(this.props.associatedMarkerProps[i], this.props.associatedMarker[i])
+                console.log("Click LI")
+                // console.log(associatedMarker)
+
+---------------------------------------------------------------------------
+
