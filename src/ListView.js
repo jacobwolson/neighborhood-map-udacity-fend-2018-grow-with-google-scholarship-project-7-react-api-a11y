@@ -25,6 +25,8 @@ class ListView extends Component {
                 let associatedMarker = associatedMarkers[i]
                 let associatedMarkerProp = associatedMarkerProps[i]
                 newLI.addEventListener('click', function() {
+                    console.log(associatedMarkerProp)
+                    console.log(associatedMarker)
                     clickLI(associatedMarkerProp, associatedMarker)
                 })
             }
@@ -33,9 +35,9 @@ class ListView extends Component {
         })
     }
 
-    // componentDidMount() {
-    //     this.populateList();
-    // }
+    componentDidMount() {
+        this.populateList();
+    }
 
     componentDidUpdate() {
         this.populateList();

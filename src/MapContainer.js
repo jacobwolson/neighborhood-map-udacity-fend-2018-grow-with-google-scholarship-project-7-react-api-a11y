@@ -25,26 +25,40 @@ import ListView from './ListView'
 export class MapContainer extends Component {
  
   state = {
-    markers: null,
-    markerProps: null,
+    // markers: null,
+    // markerProps: null,
     mapObject: null,
     showingInfoWindow: false, 
     activeMarker: {},          
     selectedPlace: {},     
   };
 
+  markersArray = []
+  markerPropsArray = []
+
   onMapReady = (mapProps, map) => {
+    console.log("map is ready")
     this.setState({mapObject: map})
-    this.makeMarkers(this.props.markers)
+    // this.makeMarkers(this.props.markers)
+    this.placeMarkers(this.state.mapObject);
+  }
+
+  componentDidUpdate() {
+    if (this.markersArray) {
+      this.placeMarkers(this.state.mapObject)
+    }
   }
 
   // https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be
   // https://developers.google.com/maps/documentation/javascript/markers
   makeMarkers = (markersList) => {
+    if (this.markersArray) {
+       this.removeMarkers()
+    }
     let markerProps = []
     let markers = []
- 
     markersList.map((marker, i) => {
+      console.log("making markers")
       let theseProps = {
         key: marker.name,
         index: i,
@@ -56,18 +70,65 @@ export class MapContainer extends Component {
         map: this.state.mapObject
       })
       thisMarker.addListener('click', () => {
+        console.log("marker" + i + "clicked")
+        console.log(theseProps)
+        console.log(thisMarker)
+        // this.onMarkerClick(theseProps, thisMarker)
         this.onMarkerClick(theseProps, thisMarker)
       })
       markerProps.push(theseProps)
       markers.push(thisMarker)
-     
-      return thisMarker
+      // return thisMarker
     })
-    this.setState({
-      markers: markers,
-      markerProps: markerProps,
+    // this.setState({
+    //   markers: markers,
+    //   markerProps: markerProps,
+    // })
+    this.markerPropsArray = markerProps
+    this.markersArray = markers
+    console.log(this.markerPropsArray)
+    console.log(this.markersArray)
+  }
+
+  // makeMarkers = (markersList) => {
+  //   let markerProps = []
+  //   let markers = []
+ 
+  //   markersList.map((marker, i) => {
+  //     console.log("making markers")
+  //     let theseProps = {
+  //       key: marker.name,
+  //       index: i,
+  //       name: marker.name,
+  //       position: marker.coordinates
+  //     }
+  //     let thisMarker = new this.props.google.maps.Marker({
+  //       position: marker.coordinates,
+  //       map: this.state.mapObject
+  //     })
+  //     thisMarker.addListener('click', () => {
+  //       this.onMarkerClick(theseProps, thisMarker)
+  //     })
+  //     markerProps.push(theseProps)
+  //     markers.push(thisMarker)
+     
+  //     return thisMarker
+  //   })
+  //   this.setState({
+  //     markers: markers,
+  //     markerProps: markerProps,
+  //   })
+  // }
+
+
+  // https://developers.google.com/maps/documentation/javascript/examples/marker-remove
+  placeMarkers = (map) => {
+    this.markersArray.forEach(marker => {
+      marker.setMap(map)
     })
   }
+
+  removeMarkers = () => this.placeMarkers(null)
 
   onMarkerClick = (props, marker, e) => 
     {this.setState({
@@ -95,13 +156,14 @@ export class MapContainer extends Component {
   };
 
   render() {
+    console.log("render map container")
     return (
       <div className="container">
       <div>
       <ListView
         markers={this.props.markers}
-        associatedMarkerProps={this.state.markerProps}
-        associatedMarkers={this.state.markers}
+        associatedMarkerProps={this.markerPropsArray}
+        associatedMarkers={this.markersArray}
         onClickLI={this.onMarkerClick}
         
         buttonOneOnClick={this.props.buttonOneOnClick}
@@ -119,8 +181,7 @@ export class MapContainer extends Component {
         zoom={this.props.zoom}
         initialCenter={this.props.initialCenter}
       >
-        
-
+        {this.makeMarkers(this.props.markers)}
         <InfoWindow
           buttonOneOnClick={this.props.buttonOneOnClick}
           buttonOneText={this.props.buttonOneText}
