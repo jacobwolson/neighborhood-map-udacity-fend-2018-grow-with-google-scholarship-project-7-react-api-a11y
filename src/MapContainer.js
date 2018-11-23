@@ -12,21 +12,9 @@ import React, { Component } from 'react'
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react'
 import ListView from './ListView'
 
-
-// ListView Props
-
-// const buttonOneText = "Show All"
-
-// const buttonTwoText = "Show North of Cal Anderson"
-
-
-
-
 export class MapContainer extends Component {
  
   state = {
-    // markers: null,
-    // markerProps: null,
     mapObject: null,
     showingInfoWindow: false, 
     activeMarker: {},          
@@ -73,53 +61,16 @@ export class MapContainer extends Component {
         console.log("marker" + i + "clicked")
         console.log(theseProps)
         console.log(thisMarker)
-        // this.onMarkerClick(theseProps, thisMarker)
         this.onMarkerClick(theseProps, thisMarker)
       })
       markerProps.push(theseProps)
       markers.push(thisMarker)
-      // return thisMarker
     })
-    // this.setState({
-    //   markers: markers,
-    //   markerProps: markerProps,
-    // })
     this.markerPropsArray = markerProps
     this.markersArray = markers
     console.log(this.markerPropsArray)
     console.log(this.markersArray)
   }
-
-  // makeMarkers = (markersList) => {
-  //   let markerProps = []
-  //   let markers = []
- 
-  //   markersList.map((marker, i) => {
-  //     console.log("making markers")
-  //     let theseProps = {
-  //       key: marker.name,
-  //       index: i,
-  //       name: marker.name,
-  //       position: marker.coordinates
-  //     }
-  //     let thisMarker = new this.props.google.maps.Marker({
-  //       position: marker.coordinates,
-  //       map: this.state.mapObject
-  //     })
-  //     thisMarker.addListener('click', () => {
-  //       this.onMarkerClick(theseProps, thisMarker)
-  //     })
-  //     markerProps.push(theseProps)
-  //     markers.push(thisMarker)
-     
-  //     return thisMarker
-  //   })
-  //   this.setState({
-  //     markers: markers,
-  //     markerProps: markerProps,
-  //   })
-  // }
-
 
   // https://developers.google.com/maps/documentation/javascript/examples/marker-remove
   placeMarkers = (map) => {
@@ -128,6 +79,7 @@ export class MapContainer extends Component {
     })
   }
 
+  // https://developers.google.com/maps/documentation/javascript/examples/marker-remove
   removeMarkers = () => this.placeMarkers(null)
 
   onMarkerClick = (props, marker, e) => 
@@ -156,7 +108,6 @@ export class MapContainer extends Component {
   };
 
   render() {
-    console.log("render map container")
     return (
       <div className="container">
       <div>
@@ -193,7 +144,6 @@ export class MapContainer extends Component {
             <h4>{this.state.selectedPlace.name}</h4>
           </div>
         </InfoWindow>
-
       </Map>
       </div>
       </div>
