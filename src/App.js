@@ -29,6 +29,14 @@ const markers = [
   {name: 'Ella Bailey Park', coordinates: {lat: 47.6408936, lng: -122.3934932}}
 ]
 
+const viewpoints = [
+  {name: 'Kerry Park', coordinates: {lat: 47.629474, lng: -122.359473}},
+  {name: 'Bhy Kracke Park', coordinates: {lat: 47.6304279, lng: -122.3494543}},
+  {name: 'Jefferson Park', coordinates: {lat: 47.571434, lng: -122.311624}},
+  {name: 'Hamilton Viewpoint Park', coordinates: {lat: 47.5930187, lng: -122.3865962}},
+  {name: 'Dr. Jose P. Rizal Bridge', coordinates: {lat: 47.5957121, lng: -122.3177041}},
+  {name: 'Ella Bailey Park', coordinates: {lat: 47.6408936, lng: -122.3934932}}
+]
 // ListView Props
 
 const buttonOneText = "Show All"
@@ -65,27 +73,21 @@ class App extends Component {
 
         <div className="container">
 
-        {/* <ListView
-          markers={this.state.markers}
-          onItemClick={this.onMarkerClick}
-          buttonOneOnClick={this.showAll}
-          buttonOneText={buttonOneText}
-          buttonTwoOnClick={this.showNorthOfCal}
-          buttonTwoText= {buttonTwoText}
-        /> */}
-        <MapContainer
-          mapStyles={mapStyles}
-          initialCenter={initialCenter}
-          markers={this.state.markers}
-          zoom={zoom}
-          // ListView props
-          markers={this.state.markers}
-          onItemClick={this.onMarkerClick}
-          buttonOneOnClick={this.showAll}
-          buttonOneText={buttonOneText}
-          buttonTwoOnClick={this.showNorthOfCal}
-          buttonTwoText= {buttonTwoText}
-        />
+          <MapContainer
+            locations={viewpoints}
+            mapStyles={mapStyles}
+            initialCenter={initialCenter}
+            markers={this.state.markers}
+            zoom={zoom}
+            // ListView props
+            markers={this.state.markers}
+            onItemClick={this.onMarkerClick}
+            buttonOneOnClick={this.showAll}
+            buttonOneText={buttonOneText}
+            buttonTwoOnClick={this.showNorthOfCal}
+            buttonTwoText= {buttonTwoText}
+          />
+
         </div>
 
       </div>
