@@ -35,11 +35,7 @@ export class MapContainer extends Component {
     this.updateMarkers(this.props.locations)
     console.log(this.props.locations)
     console.log("map is ready")
-    // this.makeMarkers(this.props.markers)
-    // this.setState({mapObject: map})
-    
-    // this.placeMarkers(this.state.mapObject)
-    this.refs.listView.populateList()
+    console.log(this.state.markers)
   }
 
   updateMarkers = (locations) => {
@@ -74,11 +70,12 @@ export class MapContainer extends Component {
       thisMarker.addListener('click', () => {
         this.onMarkerClick(theseMarkerProps, thisMarker, null)
       })
+      console.log(thisMarker)
       markersTemp.push(thisMarker)
 
       return thisMarker
     })
-
+  console.log(markersTemp)
   this.setState({markers: markersTemp, markerProps: markerPropsTemp})    
 
 }
@@ -105,151 +102,6 @@ closeInfoWindow = () => {
   }
 }
 
-  componentDidUpdate() {
-    this.refs.listView.populateList()
-  }
-
-  storeMarkerInfo = (thisMarker) => {
-    // this.markersArray = []
-    // this.markerPropsArray = []
-  // let markerProps = []
-  // let markers = []
-  // let theseProps = this.props.markers.map((marker, i) => {
-  //   return {
-  //     key: marker.name,
-  //     index: i,
-  //     name: marker.name,
-  //     position: marker.coordinates
-  //     }
-  // })
-  let theseProps = {
-      key: thisMarker.props.name,
-      index: '',
-      name: thisMarker.props.name,
-      position: thisMarker.props.position
-  }
-    // let markerCopy = new this.props.google.maps.Marker({
-    //   position: marker.coordinates,
-    //   map: this.mapObject
-    // })
-    console.log(thisMarker)
-    // let markerCopy = Object.assign({}, thisMarker)
-    let markerCopy = React.cloneElement(thisMarker)
-    console.log(markerCopy)
-    this.markersArray.push(markerCopy)
-    // markers.push(thisMarker)
-    this.markerPropsArray.push(theseProps)
-    console.log(this.markersArray)
-    console.log(this.markerPropsArray)
-    // console.log(markers)
-  // this.markerPropsArray = markerProps
-  // this.markersArray = markers
-  // console.log(this.markersArray)
-}
-
-  // // componentDidMount() {
-  // //   this.refs.listView.populateList()
-  // // }
-
-  // componentDidUpdate() {
-  //   if (this.markersArray) {
-  //     this.makeMarkers(this.props.markers)
-  //     this.placeMarkers(this.state.mapObject)
-  //     this.refs.listView.populateList()
-  //   }
-  //   // this.refs.listView.populateList()
-  // }
-
-  // // https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be
-  // // https://developers.google.com/maps/documentation/javascript/markers
-  // makeMarkers = (markersList) => {
-  //   if (this.markersArray) {
-  //      this.removeMarkers()
-  //   }
-  //   let markerProps = []
-  //   let markers = []
-  //   markersList.map((marker, i) => {
-  //     let theseProps = {
-  //       key: marker.name,
-  //       index: i,
-  //       name: marker.name,
-  //       position: marker.coordinates
-  //     }
-  //     let thisMarker = new this.props.google.maps.Marker({
-  //       position: marker.coordinates,
-  //       // map: this.state.mapObject
-  //     })
-  //     console.log(thisMarker)
-  //     console.log(theseProps)
-  //     thisMarker.addListener('click', () => {
-  //       this.onMarkerClick(theseProps, thisMarker)
-  //       console.log("marker click")
-  //       console.log(theseProps)
-  //       console.log(thisMarker)
-  //     })
-  //     markerProps.push(theseProps)
-  //     markers.push(thisMarker)
-  //   })
-  //   this.markerPropsArray = markerProps
-  //   this.markersArray = markers
-  //   console.log(this.markerPropsArray)
-  //   console.log(this.markersArray)
-  //   // if (this.refs.listView) {
-  //   //   this.refs.listView.populateList()
-  //   // }
-  // }
-
-  // // https://developers.google.com/maps/documentation/javascript/examples/marker-remove
-  // placeMarkers = (map) => {
-  //   this.markersArray.forEach(marker => {
-  //     marker.setMap(map)
-  //   })
-  //   console.log("markers set")
-  //   // if (this.refs.listView) {
-  //   //   this.refs.listView.populateList()
-  //   //   console.log("list view populated")
-  //   // } else {
-  //   //   console.log("No ListView yet")
-  //   // }
-  // }
-
-  // removeMarkers = () => this.placeMarkers(null)
-
-  // onMarkerClick = (props, marker, e) => {
-  //   console.log("On Marker Click Invoked")
-  //   {this.setState({
-  //     selectedPlace: props,
-  //     activeMarker: marker,
-  //     showingInfoWindow: true
-  //   })};
-      // let markerProps = []
-      // let markers = []
-      // this.props.markers.map((marker, i) => {
-      //   let theseProps = {
-      //     key: marker.name,
-      //     index: i,
-      //     name: marker.name,
-      //     position: marker.coordinates
-      //   }
-      //   let thisMarker = new this.props.google.maps.Marker({
-      //     position: marker.coordinates,
-      //   })
-      //   markerProps.push(theseProps)
-      //   markers.push(thisMarker)
-      // })
-      // this.markerPropsArray = markerProps
-      // this.markersArray = markers
-  // }
-
-  // onClose = props => {
-  //   if (this.state.infoWindowDisplayed) {
-  //     this.setState({
-  //       showingInfoWindow: false,
-  //       activeMarker: null
-  //     });
-  //   }
-  // };
-
   onMapClicked = (props) => {
     if (this.state.showingInfoWindow) {
       this.setState({
@@ -266,12 +118,9 @@ closeInfoWindow = () => {
       <ListView
         google={this.props.google}
         ref="listView"
-        markers={this.props.markers}
         locations={this.props.locations}
-        // associatedMarkerProps={this.markerPropsArray}
-        // associatedMarkers={this.markersArray}
-        associatedMarkers={this.state.markers}
-        associatedMarkerProps={this.state.markerProps}
+        let markersList={this.state.markers}
+        let markerPropsList={this.state.markerProps}
         onClickLI={this.onMarkerClick}
         onClose={this.onClose}
         buttonOneOnClick={this.props.buttonOneOnClick}
@@ -279,6 +128,7 @@ closeInfoWindow = () => {
         buttonTwoOnClick={this.props.buttonTwoOnClick}
         buttonTwoText={this.props.buttonTwoText}
       >
+      {/* {this.refs.listView && this.refs.listView.populateList()} */}
       </ListView>
       </div>
       <div>

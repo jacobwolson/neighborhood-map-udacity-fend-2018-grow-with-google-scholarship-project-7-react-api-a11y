@@ -17,54 +17,23 @@ class ListView extends Component {
     populateList = () => {
         console.log("populating list")
         const listViewList = document.getElementById('list-view-list')
-        listViewList.innerHTML = ''
-        // let associatedMarkers = this.props.associatedMarkers
-        // let associatedMarkerProps = this.props.associatedMarkerProps
-        let clickLI = this.props.onClickLI
-        let i = 0
+        if (listViewList) {
+            listViewList.innerHTML = ''
         
-
-    //     let markerProps = []
-    //   let markers = []
-    //   this.props.markers.map((marker, i) => {
-    //     let theseProps = {
-    //       key: marker.name,
-    //       index: i,
-    //       name: marker.name,
-    //       position: marker.coordinates
-    //     }
-    //     let thisMarker = new this.props.google.maps.Marker({
-    //       position: marker.coordinates,
-    //     })
-    //     markerProps.push(theseProps)
-    //     markers.push(thisMarker)
-    //   })
-    //   this.markerPropsArray = markerProps
-    //   this.markersArray = markers
-
-
-        this.props.markers.forEach(marker => {
+        let clickLI = this.props.onClickLI
+        let i = 0;
+        let markerPropsList = this.props.markerPropsList
+        let markersList = this.props.markersList
+        markerPropsList.forEach(markerProp => {
             const newLI = document.createElement('li')
-            newLI.innerHTML = marker.name;
-            if (this.props.associatedMarkers.length !== 0) {
-                console.log(this.props.associatedMarkerProps)
-                console.log(this.props.associatedMarkers)
-                console.log("our markers array has markers")
-                let associatedMarker = this.props.associatedMarkers[i]
-                console.log(associatedMarker)
-                let associatedMarkerProp = this.props.associatedMarkerProps[i]
-                console.log(associatedMarkerProp)
-                newLI.addEventListener('click', function() {
-                    console.log("click LI")
-                    console.log(clickLI)
-                    console.log(associatedMarkerProp)
-                    console.log(associatedMarker)
-                    clickLI(associatedMarkerProp, associatedMarker)
-                })
-            }
-            document.getElementById('list-view-list').appendChild(newLI)
+            newLI.innerHTML = markerProp.name;
+            let associatedMarker = markersList[i]
+            let associatedMarkerProps = markerPropsList[i]
+            newLI.addEventListener('click', () => clickLI(associatedMarkerProps, associatedMarker))
+            listViewList.appendChild(newLI)
             i++
         })
+        }
     }
 
     componentDidMount() {
@@ -93,6 +62,7 @@ class ListView extends Component {
 
                 </ul>
                 <ul id="list-view-list">
+                {this.populateList()}
                 {/* An appropriately filtered list of our locations will go here whenever the `.populateList()` method is invoked.
                 */}
                 </ul>
