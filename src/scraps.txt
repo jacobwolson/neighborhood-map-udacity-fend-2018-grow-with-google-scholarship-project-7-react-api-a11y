@@ -367,3 +367,28 @@ export default GoogleApiWrapper({
 
 --------------------------------------------------------------------------------
 
+{/* { this.markersArray = [],
+          this.markerPropsArray = [],
+          this.props.markers.map((marker, i) => {
+            let thisMarker = (
+              <Marker 
+                onClick={this.onMarkerClick}
+                name={marker.name}
+                position={marker.coordinates}
+              />
+            )
+            this.storeMarkerInfo(thisMarker)
+            return thisMarker
+          })}
+          {console.log(this.markersArray)}
+
+            {/* return(
+              <Marker 
+                onClick={this.onMarkerClick}
+                name={marker.name}
+                position={marker.coordinates}
+              />
+            )
+          })} */}
+
+-------------------------------------------------------------------------------------

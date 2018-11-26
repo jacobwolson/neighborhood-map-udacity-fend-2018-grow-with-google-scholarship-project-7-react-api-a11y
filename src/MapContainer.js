@@ -12,6 +12,11 @@ import React, { Component } from 'react'
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react'
 import ListView from './ListView'
 
+const FOURSQUARE_CLIENT_ID = "WBRJ0OIHLBSA0BEJ0WYUGV2EYMNV5DN25SNEGYBVCM0LPR0M"
+const FOURSQUARE_CLIENT_SECRET = "44CDSMTT0QOYYOHLTJHZOOP5OL5XDC2JZIUFWJFNSHXI0DGH"
+const FOURSQUARE_VERSION = "20181125"
+
+
 export class MapContainer extends Component {
 
   mapObject = null 
@@ -23,27 +28,28 @@ export class MapContainer extends Component {
     activeMarker: null,
     activeMarkerProps: null,
     showingInfoWindow: false,          
-    // selectedPlace: null    
   };
 
   markersArray = []
   markerPropsArray = []
   
-
   onMapReady = (mapProps, map) => {
+    console.log("Map ready!")
     this.mapObject = map
     this.updateMarkers(this.props.locations)
-    console.log(this.props.locations)
-    console.log("map is ready")
-    console.log(this.state.markers)
+    this.refs.listView.populateList()
   }
+
+  // componentDidUpdate() {
+  //   // this.updateMarkers(this.props.locations, this.refs.listView.populateList)
+  //   this.refs.listView.populateList()
+  // }
 
   updateMarkers = (locations) => {
     if (!locations) {
       console.log("no locations available")
       return
     }
-    console.log("updating markers based on locations")
     
     this.state.markers.forEach(marker => marker.setMap(null))
     
@@ -56,7 +62,7 @@ export class MapContainer extends Component {
         key: i,
         index: i,
         position: location.coordinates,
-        url: 'nonesuch'
+        url: location.url
       }
       markerPropsTemp.push(theseMarkerProps)
 
@@ -65,7 +71,8 @@ export class MapContainer extends Component {
       let thisMarker = new this.props.google.maps.Marker({
         position: location.coordinates,
         map: this.mapObject,
-        animation: animation 
+        animation: animation,
+        url: location.url
       })
       thisMarker.addListener('click', () => {
         this.onMarkerClick(theseMarkerProps, thisMarker, null)
@@ -75,21 +82,93 @@ export class MapContainer extends Component {
 
       return thisMarker
     })
-  console.log(markersTemp)
-  this.setState({markers: markersTemp, markerProps: markerPropsTemp})    
+  console.log(markerPropsTemp)
+  this.setState({markers: markersTemp, markerProps: markerPropsTemp}) 
 
+}
+
+// Code from: https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be
+getVenues = (props, data) => {
+  return data
+        .response
+        .venues
+        .filter(item => item.name.includes(props.name) || props.name.includes(item.name))
 }
 
 onMarkerClick = (props, marker, e) => {
-  this.closeInfoWindow()
   console.log("On Marker Click Invoked")
-  {this.setState({
-    activeMarkerProps: props,
-    activeMarker: marker,
-    showingInfoWindow: true
-    // selectedPlace: props,
-  })}
-}
+  this.closeInfoWindow()
+
+  // Fetch info from Foursquare
+
+  // https://stackoverflow.com/a/17864016
+  // https://developer.foursquare.com/docs/api/configuration/versioning
+  let fsUrl = `https://api.foursquare.com/v2/venues/search?client_id=${FOURSQUARE_CLIENT_ID}&client_secret=${FOURSQUARE_CLIENT_SECRET}&v=${FOURSQUARE_VERSION}&radius=100&ll=${props.position.lat},${props.position.lng}&llAcc=200`
+              
+  let headers = new Headers()
+  let request = new Request(fsUrl, {
+    method: 'GET',
+    headers
+  })
+
+  // Code from: https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be
+  let activeMarkerProps
+  fetch(request)
+    .then(response => response.json())
+    .then(result => {
+      console.log(result)
+      let venue = this.getVenues(props, result)[0]
+      activeMarkerProps = {
+        // props that were passed in to funciton
+        ...props,
+        // foursquare data for venue
+        foursquare: venue
+      }
+      console.log(activeMarkerProps)
+      
+      if (activeMarkerProps.foursquare) {
+        let imageUrl = `https://api.foursquare.com/v2/venues/${venue.id}/photos?client_id=${FOURSQUARE_CLIENT_ID}&client_secret=${FOURSQUARE_CLIENT_SECRET}&v=${FOURSQUARE_VERSION}`
+        fetch(imageUrl).then(response => response.json()).then(result => {
+          activeMarkerProps = {
+            ...activeMarkerProps,
+            images: result.response.photos
+          }
+          if (this.state.activeMarker)
+            this.state.activeMarker.setAnimation(null)
+            marker.setAnimation(this.props.google.maps.Animation.BOUNCE)
+            {this.setState({
+              activeMarkerProps,
+              activeMarker: marker,
+              showingInfoWindow: true
+              // selectedPlace: props,
+            })}
+        })
+      } else {
+          marker.setAnimation(this.props.google.maps.Animation.BOUNCE)
+          {this.setState({
+            activeMarkerProps,
+            activeMarker: marker,
+            showingInfoWindow: true
+            // selectedPlace: props,
+          })}
+          // this.setState({showingInfoWindow: true, activeMarker: marker, activeMarkerProps: activeMarkerProps})
+      }
+    })
+  }
+      
+
+
+      // if (activeMarkerProps.foursquare) {
+
+      // }
+ 
+//   {this.setState({
+//     activeMarkerProps: props,
+//     activeMarker: marker,
+//     showingInfoWindow: true
+//     // selectedPlace: props,
+//   })}
+// }
 
 closeInfoWindow = () => {
   if (this.state.activeMarker) {
@@ -140,45 +219,24 @@ closeInfoWindow = () => {
         zoom={this.props.zoom}
         initialCenter={this.props.initialCenter}
       >
-        {/* { this.markersArray = [],
-          this.markerPropsArray = [],
-          this.props.markers.map((marker, i) => {
-            let thisMarker = (
-              <Marker 
-                onClick={this.onMarkerClick}
-                name={marker.name}
-                position={marker.coordinates}
-              />
-            )
-            this.storeMarkerInfo(thisMarker)
-            return thisMarker
-          })}
-          {console.log(this.markersArray)}
-
-            {/* return(
-              <Marker 
-                onClick={this.onMarkerClick}
-                name={marker.name}
-                position={marker.coordinates}
-              />
-            )
-          })} */}
+        
         <InfoWindow
-          // buttonOneOnClick={this.props.buttonOneOnClick}
-          // buttonOneText={this.props.buttonOneText}
           marker={this.state.activeMarker}
           visible={this.state.showingInfoWindow}
           onClose={this.closeInfoWindow}
         >
           <div>
-            {/* <h4>{this.state.selectedPlace.name}</h4> */}
             <h4>{this.state.activeMarkerProps && this.state.activeMarkerProps.name}</h4>
-            <a href={this.state.associatedMarkerProps && this.state.activeMarkerProps.url}>URL</a>
+            {this.state.activeMarkerProps && (
+              <img src={this.state.activeMarkerProps.images && this.state.activeMarkerProps.images.items[0].prefix + "100x100" + this.state.activeMarkerProps.images.items[0].suffix}/>
+              )
+            }
+            <div>
+              <a href={this.state.activeMarkerProps && this.state.activeMarkerProps.url}>Website</a>
+            </div>
           </div>
           
         </InfoWindow>
-        {/* {this.makeMarkers(this.props.markers)} */}
-        {/* <Marker /> */}
       </Map>
       </div>
       </div>

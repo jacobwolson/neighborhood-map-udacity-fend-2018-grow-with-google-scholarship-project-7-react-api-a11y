@@ -36,15 +36,6 @@ class ListView extends Component {
         }
     }
 
-    componentDidMount() {
-        console.log("ListView Mounted")
-        // this.populateList();
-    }
-
-    // componentDidUpdate() {
-    //     this.populateList();
-    // }
-
     render() {
 
         return(
@@ -62,7 +53,7 @@ class ListView extends Component {
 
                 </ul>
                 <ul id="list-view-list">
-                {this.populateList()}
+                {/* {this.populateList()} */}
                 {/* An appropriately filtered list of our locations will go here whenever the `.populateList()` method is invoked.
                 */}
                 </ul>
