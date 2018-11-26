@@ -40,24 +40,28 @@ export class MapContainer extends Component {
     this.refs.listView.populateList()
   }
 
-  // componentDidUpdate() {
-  //   // this.updateMarkers(this.props.locations, this.refs.listView.populateList)
-  //   this.refs.listView.populateList()
-  // }
+  componentDidUpdate() {
+    // this.updateMarkers(this.props.locations, this.refs.listView.populateList)
+    // this.refs.listView.populateList()
+    this.updateMarkers(this.props.locations)
+    this.refs.listView.populateList()
+  }
 
   updateMarkers = (locations) => {
+    console.log("Updating markers")
     if (!locations) {
       console.log("no locations available")
       return
     }
     
-    this.state.markers.forEach(marker => marker.setMap(null))
+    
     
     let markerPropsTemp = []
     let markersTemp = []
+    let theseMarkerProps = {}
     
     locations.forEach((location, i) => {
-      let theseMarkerProps = {
+      theseMarkerProps = {
         name: location.name,
         key: i,
         index: i,
@@ -65,9 +69,12 @@ export class MapContainer extends Component {
         url: location.url
       }
       markerPropsTemp.push(theseMarkerProps)
+    });
 
-      let animation = null
-
+    if (this.state.markerProps.length !== markerPropsTemp.length) {
+      this.state.markers.forEach(marker => marker.setMap(null))
+      locations.forEach((location, i) => {
+      let animation = 4
       let thisMarker = new this.props.google.maps.Marker({
         position: location.coordinates,
         map: this.mapObject,
@@ -75,16 +82,15 @@ export class MapContainer extends Component {
         url: location.url
       })
       thisMarker.addListener('click', () => {
-        this.onMarkerClick(theseMarkerProps, thisMarker, null)
+        this.onMarkerClick(markerPropsTemp[i], thisMarker, null)
       })
       console.log(thisMarker)
       markersTemp.push(thisMarker)
 
       return thisMarker
-    })
-  console.log(markerPropsTemp)
-  this.setState({markers: markersTemp, markerProps: markerPropsTemp}) 
-
+      })
+      this.setState({markers: markersTemp, markerProps: markerPropsTemp}) 
+    }
 }
 
 // Code from: https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be
@@ -135,7 +141,9 @@ onMarkerClick = (props, marker, e) => {
           }
           if (this.state.activeMarker)
             this.state.activeMarker.setAnimation(null)
-            marker.setAnimation(this.props.google.maps.Animation.BOUNCE)
+            // marker.setAnimation(this.props.google.maps.Animation.BOUNCE)
+            // thanks to: https://stackoverflow.com/a/36396843
+            marker.setAnimation(4)
             {this.setState({
               activeMarkerProps,
               activeMarker: marker,
@@ -144,32 +152,17 @@ onMarkerClick = (props, marker, e) => {
             })}
         })
       } else {
-          marker.setAnimation(this.props.google.maps.Animation.BOUNCE)
+          // marker.setAnimation(this.props.google.maps.Animation.BOUNCE)
+          marker.setAnimation(4)
           {this.setState({
             activeMarkerProps,
             activeMarker: marker,
             showingInfoWindow: true
-            // selectedPlace: props,
           })}
-          // this.setState({showingInfoWindow: true, activeMarker: marker, activeMarkerProps: activeMarkerProps})
       }
     })
   }
       
-
-
-      // if (activeMarkerProps.foursquare) {
-
-      // }
- 
-//   {this.setState({
-//     activeMarkerProps: props,
-//     activeMarker: marker,
-//     showingInfoWindow: true
-//     // selectedPlace: props,
-//   })}
-// }
-
 closeInfoWindow = () => {
   if (this.state.activeMarker) {
     this.state.activeMarker.setAnimation(null)
@@ -191,6 +184,8 @@ closeInfoWindow = () => {
   };
 
   render() {
+    {console.log("render mapContainer")}
+    {console.log(this.props.locations)}
     return (
       <div className="container">
       <div>
@@ -207,7 +202,7 @@ closeInfoWindow = () => {
         buttonTwoOnClick={this.props.buttonTwoOnClick}
         buttonTwoText={this.props.buttonTwoText}
       >
-      {/* {this.refs.listView && this.refs.listView.populateList()} */}
+       
       </ListView>
       </div>
       <div>

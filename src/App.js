@@ -20,15 +20,6 @@ const initialCenter = {
 
 const zoom = 12
 
-const markers = [
-  {name: 'Kerry Park', coordinates: {lat: 47.629474, lng: -122.359473}},
-  {name: 'Bhy Kracke Park', coordinates: {lat: 47.6304279, lng: -122.3494543}},
-  {name: 'Jefferson Park', coordinates: {lat: 47.571434, lng: -122.311624}},
-  {name: 'Hamilton Viewpoint Park', coordinates: {lat: 47.5930187, lng: -122.3865962}},
-  {name: 'Dr. Jose P. Rizal Bridge', coordinates: {lat: 47.5957121, lng: -122.3177041}},
-  {name: 'Ella Bailey Park', coordinates: {lat: 47.6408936, lng: -122.3934932}}
-]
-
 const viewpoints = [
   {name: 'Kerry Park', coordinates: {lat: 47.629474, lng: -122.359473}, url: 'https://www.seattle.gov/parks/find/parks/kerry-park'},
   {name: 'Bhy Kracke Park', coordinates: {lat: 47.6304279, lng: -122.3494543}, url: 'https://www.seattle.gov/parks/find/parks/bhy-kracke-park'},
@@ -46,7 +37,6 @@ const buttonTwoText = "Show North of Cal Anderson"
 class App extends Component {
   
   state = {
-    markers: [],
     locations: []
   }
 
@@ -54,6 +44,9 @@ class App extends Component {
     const markersNorthOfCal = this.state.locations.filter(location => location.coordinates.lat > 47.6173)
     console.log("show north of cal")
     this.setState({locations: markersNorthOfCal})
+    console.log("North of Cal")
+    console.log(this.state.locations)
+    console.log(markersNorthOfCal)
   }
 
   showAll = () => {
@@ -62,11 +55,15 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.setState({markers: markers})
     this.setState({locations: viewpoints})
   }
 
+  componentDidUpdate() {
+    {this.refs.mapContainer && console.log("Update App Component")}
+  }
+
   render() {
+    {console.log("render app component")}
     return (
       <div>
         {/* <NavBar/> */}
@@ -77,10 +74,10 @@ class App extends Component {
         <div className="container">
 
           <MapContainer
+            ref="mapContainer"
             locations={this.state.locations}
             mapStyles={mapStyles}
             initialCenter={initialCenter}
-            // markers={this.state.markers}
             zoom={zoom}
             // ListView-specific props
             onItemClick={this.onMarkerClick}
