@@ -392,3 +392,13 @@ export default GoogleApiWrapper({
           })} */}
 
 -------------------------------------------------------------------------------------
+
+  // state = {
+    //     markers: null
+    // }
+
+    // showInfoWindowFromList = (prop, marker) => {
+    //     this.props.onClickLI(prop, marker)
+    // }
+
+---------------------------------------------------------------------------------

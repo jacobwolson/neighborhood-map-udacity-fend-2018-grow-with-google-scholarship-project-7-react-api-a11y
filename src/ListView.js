@@ -1,16 +1,10 @@
 import React, { Component } from 'react'
-
+import SelectMenu from './SelectMenu'
 class ListView extends Component {
     
     markerPropsArray = []
     markersArray = []
-    // state = {
-    //     markers: null
-    // }
-
-    // showInfoWindowFromList = (prop, marker) => {
-    //     this.props.onClickLI(prop, marker)
-    // }
+  
 
     // Consulted for creating and adding new LI: https://www.w3schools.com/jsref/met_node_appendchild.asp
     // Code for clearing list: https://stackoverflow.com/a/27324794
@@ -23,6 +17,7 @@ class ListView extends Component {
         let clickLI = this.props.onClickLI
         let i = 0;
         let markerPropsList = this.props.markerPropsList
+        console.log(markerPropsList)
         let markersList = this.props.markersList
         markerPropsList.forEach(markerProp => {
             const newLI = document.createElement('li')
@@ -36,11 +31,25 @@ class ListView extends Component {
         }
     }
 
+    resetThenSet = (id, key) => {
+        let temp = JSON.parse(JSON.stringify(this.state[key]));
+        temp.forEach(item => item.selected = false);
+        temp[id].selected = true;
+        this.setState({
+          [key]: temp
+        });
+      }
+
     render() {
 
         return(
-            <div className="list-view-container">
-                <h2>List View</h2>
+            <span>
+
+                <SelectMenu
+                    // filterLocations={this.filterLocations}
+                />
+
+                <div>
                 <ul>
                 <li>
                     <button
@@ -53,11 +62,11 @@ class ListView extends Component {
 
                 </ul>
                 <ul id="list-view-list">
-                {/* {this.populateList()} */}
                 {/* An appropriately filtered list of our locations will go here whenever the `.populateList()` method is invoked.
                 */}
                 </ul>
             </div>
+            </span>
         )
     }
 }

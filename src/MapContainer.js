@@ -1,4 +1,6 @@
-/* Cnosulted/sources, general: https://scotch.io/tutorials/react-apps-with-the-google-maps-api-and-google-maps-react
+// Walkthrough consulted: https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be
+
+/* Consulted sources, general: https://scotch.io/tutorials/react-apps-with-the-google-maps-api-and-google-maps-react
     https://github.com/fullstackreact/google-maps-react/blob/master/README.md
 */
 // Consulted for dynamically adding markers: https://stackoverflow.com/a/43938322
@@ -41,8 +43,6 @@ export class MapContainer extends Component {
   }
 
   componentDidUpdate() {
-    // this.updateMarkers(this.props.locations, this.refs.listView.populateList)
-    // this.refs.listView.populateList()
     this.updateMarkers(this.props.locations)
     this.refs.listView.populateList()
   }
@@ -55,13 +55,11 @@ export class MapContainer extends Component {
     }
     
     
-    
     let markerPropsTemp = []
     let markersTemp = []
-    let theseMarkerProps = {}
     
     locations.forEach((location, i) => {
-      theseMarkerProps = {
+      let theseMarkerProps = {
         name: location.name,
         key: i,
         index: i,
@@ -71,6 +69,10 @@ export class MapContainer extends Component {
       markerPropsTemp.push(theseMarkerProps)
     });
 
+    // let testArray = []
+    // if (this.state.markerProps.filter(markerProp => markerProp.name).length !== 0) {
+    //   testArray = this.state.markerProps.filter((markerProp, i) => markerProp.name === markerPropsTemp[i].name)
+    // }
     if (this.state.markerProps.length !== markerPropsTemp.length) {
       this.state.markers.forEach(marker => marker.setMap(null))
       locations.forEach((location, i) => {
@@ -181,7 +183,11 @@ closeInfoWindow = () => {
         activeMarker: null
       })
     }
-  };
+  }
+
+  filterLocations() {
+    console.log("Filtering locations!")
+  }
 
   render() {
     {console.log("render mapContainer")}
@@ -201,6 +207,8 @@ closeInfoWindow = () => {
         buttonOneText={this.props.buttonOneText}
         buttonTwoOnClick={this.props.buttonTwoOnClick}
         buttonTwoText={this.props.buttonTwoText}
+        For SelectMenu component
+        filterLocations={this.filterLocations}
       >
        
       </ListView>
