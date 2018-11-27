@@ -205,8 +205,7 @@ closeInfoWindow = () => {
     : selectedOption === 'westOfCal'
     ? this.props.showWestOfCal()
     : selectedOption === 'northOfCal' 
-    ? this.props.showNorthOfCal()
-    : console.log("no function for that")
+    && this.props.showNorthOfCal()
   }
 
   render() {
