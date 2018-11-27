@@ -18,7 +18,6 @@ const FOURSQUARE_CLIENT_ID = "WBRJ0OIHLBSA0BEJ0WYUGV2EYMNV5DN25SNEGYBVCM0LPR0M"
 const FOURSQUARE_CLIENT_SECRET = "44CDSMTT0QOYYOHLTJHZOOP5OL5XDC2JZIUFWJFNSHXI0DGH"
 const FOURSQUARE_VERSION = "20181125"
 
-
 export class MapContainer extends Component {
 
   mapObject = null 
@@ -67,7 +66,6 @@ export class MapContainer extends Component {
       return null
     }
   }
-      
 
   updateMarkers = (locations) => {
     console.log("Updating markers")
@@ -75,7 +73,6 @@ export class MapContainer extends Component {
       console.log("no locations available")
       return
     }
-    
     
     let markerPropsTemp = []
     let markersTemp = []
@@ -111,9 +108,7 @@ export class MapContainer extends Component {
       thisMarker.addListener('click', () => {
         this.onMarkerClick(markerPropsTemp[i], thisMarker, null)
       })
-      console.log(thisMarker)
       markersTemp.push(thisMarker)
-
       return thisMarker
       })
       this.setState({markers: markersTemp, markerProps: markerPropsTemp}) 
@@ -131,25 +126,20 @@ getVenues = (props, data) => {
 onMarkerClick = (props, marker, e) => {
   console.log("On Marker Click Invoked")
   this.closeInfoWindow()
-
   // Fetch info from Foursquare
-
   // https://stackoverflow.com/a/17864016
   // https://developer.foursquare.com/docs/api/configuration/versioning
   let fsUrl = `https://api.foursquare.com/v2/venues/search?client_id=${FOURSQUARE_CLIENT_ID}&client_secret=${FOURSQUARE_CLIENT_SECRET}&v=${FOURSQUARE_VERSION}&radius=100&ll=${props.position.lat},${props.position.lng}&llAcc=200`
-              
   let headers = new Headers()
   let request = new Request(fsUrl, {
     method: 'GET',
     headers
   })
-
   // Code from: https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be
   let activeMarkerProps
   fetch(request)
     .then(response => response.json())
     .then(result => {
-      console.log(result)
       let venue = this.getVenues(props, result)[0]
       activeMarkerProps = {
         // props that were passed in to funciton
@@ -157,8 +147,6 @@ onMarkerClick = (props, marker, e) => {
         // foursquare data for venue
         foursquare: venue
       }
-      console.log(activeMarkerProps)
-      
       if (activeMarkerProps.foursquare) {
         let imageUrl = `https://api.foursquare.com/v2/venues/${venue.id}/photos?client_id=${FOURSQUARE_CLIENT_ID}&client_secret=${FOURSQUARE_CLIENT_SECRET}&v=${FOURSQUARE_VERSION}`
         fetch(imageUrl).then(response => response.json()).then(result => {
@@ -210,15 +198,14 @@ closeInfoWindow = () => {
   }
 
   filterLocations = (selectedOption) => {
-    selectedOption === 'anywhere' 
-    ? this.props.showAll()
-    : selectedOption === 'southOfCal' 
-    ? this.props.showSouthOfCal()
-    : selectedOption === 'westOfCal'
-    ? this.props.showWestOfCal()
-    : selectedOption === 'northOfCal' 
-    ? this.props.showNorthOfCal()
-    : console.log("no function for that")
+    selectedOption === 'anywhere' ?
+    this.props.showAll() :
+    selectedOption === 'southOfCal' ?
+    this.props.showSouthOfCal() :
+    selectedOption === 'westOfCal' ?
+    this.props.showWestOfCal() :
+    selectedOption === 'northOfCal' ? 
+    this.props.showNorthOfCal() : null
   }
 
   render() {

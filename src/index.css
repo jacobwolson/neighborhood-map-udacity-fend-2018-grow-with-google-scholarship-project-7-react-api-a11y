@@ -10,21 +10,27 @@ body {
 
 h1 {
   text-align: center;
+  margin-bottom: 0.1em;
 }
 
 .list-view-container {
-  width: 20em;
-  margin: 1em;
-  flex-direction: column;
-  flex-wrap: wrap;
+  width: 15em;
+  margin: 0.2em 0.75em 0.5em 0.75em;
 }
 
-.list-view-container h2 {
+#filter-options-label {
   text-align: center;
+  margin-bottom: 0.25em; 
+}
+
+.map-view-container {
+  min-width: 290px;
+  margin: 0.1em;
 }
 
 .container {
   display: flex;
+  flex-wrap: wrap;
 }
 
 code {
@@ -41,4 +47,10 @@ ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
+}
+
+select {
+  cursor: pointer;
+  margin-bottom: 0.22em;
+  margin-top: 0.3em;
 }

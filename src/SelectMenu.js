@@ -13,7 +13,7 @@ class SelectMenu extends Component {
 
         return (
             <div className="select-menu-container">
-                <label for="filter-options">Filter by Location</label>
+                <label id="filter-options-label" for="filter-options">Filter by Location</label>
                 <div>
                     <select 
                         autofocus 

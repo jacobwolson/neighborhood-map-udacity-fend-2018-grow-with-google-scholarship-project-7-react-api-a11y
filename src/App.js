@@ -7,11 +7,12 @@ const mapStyles = {
 }
 
 const initialCenter = {
-  lat: 47.619947, 
-  lng: -122.312797
+  // Coordinates for Coleman Dock
+  lat: 47.602721,
+  lng: -122.3411137
 }
 
-const zoom = 12
+const zoom = 11
 
 const buttonOneText = "Show All"
 
@@ -40,7 +41,7 @@ class App extends Component {
   // Filter option methods
     /* Reference Point: Cal Anderson Park, Capitol Hill, Seattle
       lat: 47.6185989,
-      lng: -122.3212956
+      lng: 47.6185989
     */
   showSouthOfCal = () => {
     const locationsSouthOfCal = viewpoints.filter(location => location.coordinates.lat < 47.6185989)
