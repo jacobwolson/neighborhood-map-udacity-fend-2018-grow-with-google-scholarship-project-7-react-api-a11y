@@ -14,6 +14,9 @@ h1 {
 
 .list-view-container {
   width: 20em;
+  margin: 1em;
+  flex-direction: column;
+  flex-wrap: wrap;
 }
 
 .list-view-container h2 {
@@ -27,4 +30,15 @@ h1 {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+li {
+  cursor: pointer;
+}
+
+/* Consulted: https://stackoverflow.com/a/1027367 */
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }

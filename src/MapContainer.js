@@ -47,6 +47,28 @@ export class MapContainer extends Component {
     this.refs.listView.populateList()
   }
 
+  // Modified from: https://stackoverflow.com/a/16436975
+  // Also consulted: https://stackoverflow.com/a/14853974
+  arraysMatch(array1, array2) {
+    if (array1 == null || array2 == null) return null
+    if (array1.length != array2.length) return null
+    let i = 0
+    let testArray = []
+    array1.forEach(item => {
+        if (item.name === array2[i].name) {
+          testArray.push("match")
+        }
+        i++
+      }
+    )
+    if (testArray.length === array2.length) {
+      return true 
+    } else {
+      return null
+    }
+  }
+      
+
   updateMarkers = (locations) => {
     console.log("Updating markers")
     if (!locations) {
@@ -73,7 +95,10 @@ export class MapContainer extends Component {
     // if (this.state.markerProps.filter(markerProp => markerProp.name).length !== 0) {
     //   testArray = this.state.markerProps.filter((markerProp, i) => markerProp.name === markerPropsTemp[i].name)
     // }
-    if (this.state.markerProps.length !== markerPropsTemp.length) {
+    // https://stackoverflow.com/a/16436975
+
+    let arraysMatch = this.arraysMatch(this.state.markerProps, markerPropsTemp)
+    if (!arraysMatch) {
       this.state.markers.forEach(marker => marker.setMap(null))
       locations.forEach((location, i) => {
       let animation = 4
@@ -150,7 +175,6 @@ onMarkerClick = (props, marker, e) => {
               activeMarkerProps,
               activeMarker: marker,
               showingInfoWindow: true
-              // selectedPlace: props,
             })}
         })
       } else {
@@ -185,62 +209,64 @@ closeInfoWindow = () => {
     }
   }
 
-  filterLocations() {
-    console.log("Filtering locations!")
+  filterLocations = (selectedOption) => {
+    selectedOption === 'anywhere' 
+    ? this.props.showAll()
+    : selectedOption === 'southOfCal' 
+    ? this.props.showSouthOfCal()
+    : selectedOption === 'westOfCal'
+    ? this.props.showWestOfCal()
+    : selectedOption === 'northOfCal' 
+    ? this.props.showNorthOfCal()
+    : console.log("no function for that")
   }
 
   render() {
-    {console.log("render mapContainer")}
-    {console.log(this.props.locations)}
     return (
-      <div className="container">
-      <div>
-      <ListView
-        google={this.props.google}
-        ref="listView"
-        locations={this.props.locations}
-        let markersList={this.state.markers}
-        let markerPropsList={this.state.markerProps}
-        onClickLI={this.onMarkerClick}
-        onClose={this.onClose}
-        buttonOneOnClick={this.props.buttonOneOnClick}
-        buttonOneText={this.props.buttonOneText}
-        buttonTwoOnClick={this.props.buttonTwoOnClick}
-        buttonTwoText={this.props.buttonTwoText}
-        For SelectMenu component
-        filterLocations={this.filterLocations}
-      >
-       
-      </ListView>
-      </div>
-      <div>
-      <Map 
-        google={this.props.google}
-        onReady={this.onMapReady}
-        onClick={this.onMapClicked}
-        style={this.props.mapStyles} 
-        zoom={this.props.zoom}
-        initialCenter={this.props.initialCenter}
-      >
-        
-        <InfoWindow
-          marker={this.state.activeMarker}
-          visible={this.state.showingInfoWindow}
-          onClose={this.closeInfoWindow}
-        >
-          <div>
-            <h4>{this.state.activeMarkerProps && this.state.activeMarkerProps.name}</h4>
-            {this.state.activeMarkerProps && (
-              <img src={this.state.activeMarkerProps.images && this.state.activeMarkerProps.images.items[0].prefix + "100x100" + this.state.activeMarkerProps.images.items[0].suffix}/>
-              )
-            }
-            <div>
-              <a href={this.state.activeMarkerProps && this.state.activeMarkerProps.url}>Website</a>
-            </div>
-          </div>
-          
-        </InfoWindow>
-      </Map>
+      <div className="container map-component-container">
+        <div className="container list-view-container">
+          <ListView
+            google={this.props.google}
+            ref="listView"
+            locations={this.props.locations}
+            let markersList={this.state.markers}
+            let markerPropsList={this.state.markerProps}
+            onClickLI={this.onMarkerClick}
+            onClose={this.onClose}
+            buttonOneOnClick={this.props.buttonOneOnClick}
+            buttonOneText={this.props.buttonOneText}
+            buttonTwoOnClick={this.props.buttonTwoOnClick}
+            buttonTwoText={this.props.buttonTwoText}
+            For SelectMenu component
+            filterLocations={this.filterLocations}
+          />
+        </div>
+        <div className="container map-view-container">
+          <Map 
+            google={this.props.google}
+            onReady={this.onMapReady}
+            onClick={this.onMapClicked}
+            style={this.props.mapStyles} 
+            zoom={this.props.zoom}
+            initialCenter={this.props.initialCenter}
+          >
+            <InfoWindow
+              marker={this.state.activeMarker}
+              visible={this.state.showingInfoWindow}
+              onClose={this.closeInfoWindow}
+            >
+              <div>
+                <h4>{this.state.activeMarkerProps && this.state.activeMarkerProps.name}</h4>
+                {this.state.activeMarkerProps && (
+                  <img src={this.state.activeMarkerProps.images && this.state.activeMarkerProps.images.items[0].prefix + "100x100" + this.state.activeMarkerProps.images.items[0].suffix}/>
+                  )
+                }
+                <div>
+                  <a href={this.state.activeMarkerProps && this.state.activeMarkerProps.url}>Website</a>
+                </div>
+              </div>
+            </InfoWindow>
+          </Map>
       </div>
       </div>
     );

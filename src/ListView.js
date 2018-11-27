@@ -4,12 +4,10 @@ class ListView extends Component {
     
     markerPropsArray = []
     markersArray = []
-  
 
     // Consulted for creating and adding new LI: https://www.w3schools.com/jsref/met_node_appendchild.asp
     // Code for clearing list: https://stackoverflow.com/a/27324794
     populateList = () => {
-        console.log("populating list")
         const listViewList = document.getElementById('list-view-list')
         if (listViewList) {
             listViewList.innerHTML = ''
@@ -17,7 +15,6 @@ class ListView extends Component {
         let clickLI = this.props.onClickLI
         let i = 0;
         let markerPropsList = this.props.markerPropsList
-        console.log(markerPropsList)
         let markersList = this.props.markersList
         markerPropsList.forEach(markerProp => {
             const newLI = document.createElement('li')
@@ -31,42 +28,18 @@ class ListView extends Component {
         }
     }
 
-    resetThenSet = (id, key) => {
-        let temp = JSON.parse(JSON.stringify(this.state[key]));
-        temp.forEach(item => item.selected = false);
-        temp[id].selected = true;
-        this.setState({
-          [key]: temp
-        });
-      }
-
     render() {
 
         return(
-            <span>
-
+            <div className="list-view-container">
                 <SelectMenu
-                    // filterLocations={this.filterLocations}
+                    filterLocations={this.props.filterLocations}
                 />
-
-                <div>
-                <ul>
-                <li>
-                    <button
-                        onClick={this.props.buttonOneOnClick}
-                    >{this.props.buttonOneText}</button></li>
-                <li>
-                    <button
-                        onClick={this.props.buttonTwoOnClick}
-                    >{this.props.buttonTwoText}</button></li>
-
-                </ul>
                 <ul id="list-view-list">
                 {/* An appropriately filtered list of our locations will go here whenever the `.populateList()` method is invoked.
                 */}
                 </ul>
             </div>
-            </span>
         )
     }
 }

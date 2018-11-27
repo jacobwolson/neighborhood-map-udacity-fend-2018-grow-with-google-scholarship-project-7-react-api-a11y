@@ -402,3 +402,316 @@ export default GoogleApiWrapper({
     // }
 
 ---------------------------------------------------------------------------------
+
+
+    resetThenSet = (id, key) => {
+        let temp = JSON.parse(JSON.stringify(this.state[key]));
+        temp.forEach(item => item.selected = false);
+        temp[id].selected = true;
+        this.setState({
+          [key]: temp
+        });
+      }
+
+---------------------------------------------------------------------------------------------
+
+import React from 'react';
+import {Link} from 'react-router-dom';
+
+function NavBar() {
+    return (
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a className="navbar-brand" href="#">Navbar</a>
+        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+          <span className="navbar-toggler-icon"></span>
+        </button>
+      
+        <div className="collapse navbar-collapse" id="navbarColor02">
+          <ul className="navbar-nav mr-auto">
+            <li className="nav-item active">
+              <a className="nav-link" href="#">Home <span className="sr-only">(current)</span></a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="#">Features</a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="#">Pricing</a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="#">About</a>
+            </li>
+          </ul>
+          <form className="form-inline my-2 my-lg-0">
+            <input className="form-control mr-sm-2" type="text" placeholder="Search"/>
+            <button className="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+          </form>
+        </div>
+      </nav>
+    );
+}
+
+export default NavBar;
+
+------------------------------------------------------------------------------------------
+
+import React, { Component } from 'react'
+import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react'
+
+class MapDisplay extends Component {
+    state = {
+        map: null
+    }
+
+    componentDidMount = () => {
+    }
+
+    mapReady = (props, map) => {
+        this.setState({map})
+    }
+
+    render () {
+        const style = {
+            width: '100%',
+            height: '100%'
+        }
+
+        const center = {
+            lat: this.props.lat,
+            lng: this.props.lng
+        }
+
+        return (
+            <Map
+                role="application"
+                aria-label="map"
+                onReady={this.mapReady}
+                google={this.props.google}
+                zoom={this.props.zoom}
+                style={style}
+                initialCenter={center}
+            >
+            </Map>
+        )
+    }
+}
+
+export default GoogleApiWrapper({apiKey: 'AIzaSyBvmvRFjknv-wc3F8y_SZc1WTy_rLRfW3o'
+})(MapDisplay)
+
+------------------------------------------------------------------------
+
+import React, { Component } from 'react';
+import { withGoogleMap, GoogleMap } from 'react-google-maps';
+
+class Map extends Component {
+   render() {
+
+   const GoogleMapExample = withGoogleMap(props => (
+      <GoogleMap
+        defaultCenter = { { lat: 47.619947, lng: -122.312797 } }
+        defaultZoom = { 10 }
+      >
+      </GoogleMap>
+   ));
+
+   return(
+      <div>
+        <GoogleMapExample
+          containerElement={ <div style={{ height: `10em`, width: '10em' }} /> }
+          mapElement={ <div style={{ height: `100%` }} /> }
+        />
+      </div>
+   );
+   }
+};
+
+export default Map;
+
+--------------------------------------------------------------------------------------------
+
+import React, { Component } from 'react';
+import MapContainer from './MapContainer'
+
+const mapStyles = {
+  width: '100%',
+  height: '100%'
+}
+
+const initialCenter = {
+  lat: 47.619947, 
+  lng: -122.312797
+}
+
+const zoom = 12
+
+const buttonOneText = "Show All"
+
+const buttonTwoText = "Show North of Cal Anderson"
+
+const viewpoints = [
+  {name: 'Kerry Park', coordinates: {lat: 47.629474, lng: -122.359473}, url: 'https://www.seattle.gov/parks/find/parks/kerry-park'},
+  {name: 'Bhy Kracke Park', coordinates: {lat: 47.6304279, lng: -122.3494543}, url: 'https://www.seattle.gov/parks/find/parks/bhy-kracke-park'},
+  {name: 'Jefferson Park', coordinates: {lat: 47.571434, lng: -122.311624}, url: 'https://www.seattle.gov/parks/find/parks/jefferson-park'},
+  {name: 'Hamilton Viewpoint Park', coordinates: {lat: 47.5930187, lng: -122.3865962}, url: 'https://www.seattle.gov/parks/find/parks/hamilton-viewpoint-park'},
+  {name: 'Dr. Jose P. Rizal Park', coordinates: {lat: 47.5927791, lng: -122.3183334}, url: 'https://www.seattle.gov/parks/find/parks/dr-jose-rizal-park'},
+  {name: 'Ella Bailey Park', coordinates: {lat: 47.6408936, lng: -122.3934932}, url: 'https://www.seattle.gov/parks/find/parks/ella-bailey-park'}
+]
+
+class App extends Component {
+  
+  state = {
+    locations: []
+  }
+
+  showNorthOfCal = () => {
+    const markersNorthOfCal = this.state.locations.filter(location => location.coordinates.lat > 47.6173)
+    this.setState({locations: markersNorthOfCal})
+  }
+
+  showAll = () => {
+    this.setState({locations: viewpoints})
+  }
+
+  componentDidMount() {
+    this.setState({locations: viewpoints})
+  }
+
+  render() {
+    return (
+      <div>
+        <div>
+          <h1>Best Views Seattle Map</h1>
+        </div>
+        <div className="container">
+          <MapContainer
+            locations={this.state.locations}
+            mapStyles={mapStyles}
+            initialCenter={initialCenter}
+            zoom={zoom}
+            // ListView-specific props
+            onItemClick={this.onMarkerClick}
+            buttonOneOnClick={this.showAll}
+            showAll={this.showAll}
+            buttonOneText={buttonOneText}
+            buttonTwoOnClick={this.showNorthOfCal}
+            showNorthOfCal={this.showNorthOfCal}
+            buttonTwoText= {buttonTwoText}
+          />
+        </div>
+      </div>
+    );
+  }
+}
+
+export default App;
+
+--------------------------------------------------------------------------------------
+
+import React, { Component } from 'react'
+import SelectMenu from './SelectMenu'
+class ListView extends Component {
+    
+    markerPropsArray = []
+    markersArray = []
+
+    // Consulted for creating and adding new LI: https://www.w3schools.com/jsref/met_node_appendchild.asp
+    // Code for clearing list: https://stackoverflow.com/a/27324794
+    populateList = () => {
+        const listViewList = document.getElementById('list-view-list')
+        if (listViewList) {
+            listViewList.innerHTML = ''
+        
+        let clickLI = this.props.onClickLI
+        let i = 0;
+        let markerPropsList = this.props.markerPropsList
+        let markersList = this.props.markersList
+        markerPropsList.forEach(markerProp => {
+            const newLI = document.createElement('li')
+            newLI.innerHTML = markerProp.name;
+            let associatedMarker = markersList[i]
+            let associatedMarkerProps = markerPropsList[i]
+            newLI.addEventListener('click', () => clickLI(associatedMarkerProps, associatedMarker))
+            listViewList.appendChild(newLI)
+            i++
+        })
+        }
+    }
+
+    render() {
+
+        return(
+            <span>
+                <SelectMenu
+                    filterLocations={this.props.filterLocations}
+                />
+                <ul>
+                    <li>
+                        <button onClick={this.props.buttonOneOnClick}>
+                            {this.props.buttonOneText}
+                        </button>
+                    </li>
+                    <li>
+                        <button onClick={this.props.buttonTwoOnClick}>
+                            {this.props.buttonTwoText}
+                        </button>
+                    </li>
+                </ul>
+                <ul id="list-view-list">
+                {/* An appropriately filtered list of our locations will go here whenever the `.populateList()` method is invoked.
+                */}
+                </ul>
+            </span>
+        )
+    }
+}
+
+export default ListView
+
+------------------------------------------------------------------------------------------
+
+// Source: https://github.com/dbilgili/Custom-ReactJS-Dropdown-Components
+// Source: https://www.w3.org/TR/wai-aria-practices/examples/listbox/listbox-collapsible.html
+// Source: https://www.w3schools.com/tags/tag_select.asp
+// Source: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select
+// Sources: https://stackoverflow.com/questions/19329978/change-selects-option-and-trigger-events-with-javascript
+
+import React, { Component } from 'react'
+
+class SelectMenu extends Component {
+
+    render() {
+
+        return (
+            <div className="select-menu-container">
+                <label for="filter-options">Filter by Location</label>
+                <div>
+                    <select id="filter-options" autofocus 
+                        onChange={() => {
+                        let selectedValue = document.getElementById('filter-options').value
+                        console.log(selectedValue)
+                        let selectedOption =    document.getElementById('filter-option-anywhere').selected
+                                            ? 'anywhere' :
+                                            document.getElementById('filter-option-southOfCal').selected
+                                            ? 'southOfCal' :
+                                            document.getElementById('filter-option-westOfCal').selected
+                                            ? 'westOfCal' :
+                                            document.getElementById('filter-option-northOfCal').selected
+                                            ?  'northOfCal' : 
+                                            null
+
+                        this.props.filterLocations(selectedOption)}
+                        }>
+                        <option className="filter-option" id="filter-option-anywhere" value="anywhere">Anywhere</option>
+                        <option className="filter-option" id="filter-option-southOfCal" value="southOfCal">South of Cal Anderson</option>
+                        <option className="filter-option" id="filter-option-westOfCal" value="westOFCal">West of Cal Anderson</option>
+                        <option className="filter-option" id="filter-option-northOfCal" value="northOfCal">North of Cal Anderson</option>
+                    </select>
+                </div>
+            </div>
+            )
+    }
+}
+
+export default SelectMenu
+
+-----------------------------------------------------------------------------------------------

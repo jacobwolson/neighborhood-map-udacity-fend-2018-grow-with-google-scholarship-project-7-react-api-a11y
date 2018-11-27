@@ -3,6 +3,7 @@
 // Source: https://www.w3schools.com/tags/tag_select.asp
 // Source: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select
 // Sources: https://stackoverflow.com/questions/19329978/change-selects-option-and-trigger-events-with-javascript
+// Source: https://stackoverflow.com/questions/7231157/how-to-submit-form-on-change-of-dropdown-list
 
 import React, { Component } from 'react'
 
@@ -14,11 +15,20 @@ class SelectMenu extends Component {
             <div className="select-menu-container">
                 <label for="filter-options">Filter by Location</label>
                 <div>
-                    <select id="filter-options" autofocus onChange={this.props.filterLocations}>
-                        <option value="anywhere">Anywhere</option>
-                        <option value="southOfCal">South of Cal Anderson</option>
-                        <option value="westOFCal">West of Cal Anderson</option>
-                        <option value="northOfCal">North of Cal Anderson</option>
+                    <select 
+                        autofocus 
+                        id="filter-options" 
+                        onChange={() => {
+                            let selectedOption = document.getElementById('filter-options').value
+                            console.log(selectedOption)
+                            this.props.filterLocations(selectedOption)
+                            }
+                        }
+                    >
+                        <option className="filter-option" value="anywhere">Anywhere</option>
+                        <option className="filter-option" value="southOfCal">South of Cal Anderson</option>
+                        <option className="filter-option" value="westOfCal">West of Cal Anderson</option>
+                        <option className="filter-option" value="northOfCal">North of Cal Anderson</option>
                     </select>
                 </div>
             </div>
