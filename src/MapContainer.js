@@ -198,14 +198,15 @@ closeInfoWindow = () => {
   }
 
   filterLocations = (selectedOption) => {
-    selectedOption === 'anywhere' ?
-    this.props.showAll() :
-    selectedOption === 'southOfCal' ?
-    this.props.showSouthOfCal() :
-    selectedOption === 'westOfCal' ?
-    this.props.showWestOfCal() :
-    selectedOption === 'northOfCal' ? 
-    this.props.showNorthOfCal() : null
+    selectedOption === 'anywhere' 
+    ? this.props.showAll()
+    : selectedOption === 'southOfCal' 
+    ? this.props.showSouthOfCal()
+    : selectedOption === 'westOfCal'
+    ? this.props.showWestOfCal()
+    : selectedOption === 'northOfCal' 
+    ? this.props.showNorthOfCal()
+    : console.log("no function for that")
   }
 
   render() {
