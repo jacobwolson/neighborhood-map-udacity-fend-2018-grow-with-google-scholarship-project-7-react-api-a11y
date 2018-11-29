@@ -5,9 +5,9 @@ Project 7 for Udacity's Front End Web Developer Nanodegree; completed as part of
 <br><br>
 ## Authors
 
-I — Jacob W. Olson — built this app from scratch based on my knowledge gained through Udacity's course. 
+I — Jacob W. Olson — built this app from scratch based on my knowledge gained through Udacity's course and assistance, knowledge and techniques from various sources noted throughout the code. 
 
-Project coach Doug Brown's walkthrough was also an instructive resourse. Other sources are noted throughout the code. And I could not have done it without the support of my fellow Grow with Google scholars and the wider programming community.
+Project coach Doug Brown's walkthrough was also a particularly instructive resourse. As a general overviews and outlines for creating a single page application with React incorporating Google Maps, articles by [Rachel Njeri](https://scotch.io/tutorials/react-apps-with-the-google-maps-api-and-google-maps-react) and [by Ari Lerner](https://www.fullstackreact.com/articles/how-to-write-a-google-maps-react-component/), as referenced in `LocationsDisplay.js`, were of great value and use. Many other sources that were invaluable are noted throughout the code. And I could not have done it without the support of my fellow Grow with Google scholars and the wider programming community.
 
 ## Getting the App Up and Running
 
@@ -27,6 +27,12 @@ Project coach Doug Brown's walkthrough was also an instructive resourse. Other s
 
 5. You should now be able to check out the app and it's features!
 <br><br>
+
+## Dependencies
+
+- [creat-react-app](https://github.com/facebook/create-react-app)
+- [google-maps-react](https://github.com/fullstackreact/google-maps-react)
+- [sort-by](https://www.npmjs.com/package/sort-by)
 
 ## More info as provided by create-react-app.
 
