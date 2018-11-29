@@ -1,4 +1,8 @@
-// Walkthrough consulted: https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be
+/* Project coach Doug Brown's walkthrough was consulted in the course of completing this project, and had 
+particular influnce on this component. 
+  https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be,
+  Steps 1 - 3, and the portion addressing turning on the service worker, were viewed, and were a source of inpriation for this code.
+*/
 
 /* Sources consulted for incorporating a Google map with dynamic markers in a React app using google-maps-react, general: 
   https://scotch.io/tutorials/react-apps-with-the-google-maps-api-and-google-maps-react
@@ -7,7 +11,7 @@
 
 // Consulted for dynamically adding markers: https://stackoverflow.com/a/43938322
 
-/* Also consulted: 
+/* Also consulted, general:
 https://stackoverflow.com/a/53322289
 https://stackoverflow.com/a/47563854
 https://reactjs.org/docs/lifting-state-up.html#lifting-state-up
@@ -15,17 +19,19 @@ https://reactjs.org/docs/components-and-props.html
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator
 */
 
+// Additional sources are referenced above lines or blocks of relevant code throughout the document.
+
 import React, { Component } from 'react'
 import {Map, InfoWindow, GoogleApiWrapper} from 'google-maps-react'
 import ListView from './ListView'
+import NoMap from './NoMap'
 
 const FLICKR_API_KEY = "2b6766fb0960cc8091819b49e304df4b"
 
 export class LocationsDisplay extends Component {
-
-  mapObject = null 
  
   state = {
+    mapObject: null,
     markers: [],
     markerProps: [],
     activeMarker: null,
@@ -37,7 +43,7 @@ export class LocationsDisplay extends Component {
   markerPropsArray = []
   
   onMapReady = (mapProps, map) => {
-    this.mapObject = map
+    this.setState({mapObject: map})
     this.updateMarkers(this.props.locations)
     this.refs.listView.populateList()
   }
@@ -47,13 +53,15 @@ export class LocationsDisplay extends Component {
     this.refs.listView.populateList()
   }
 
-  // Modified from https://stackoverflow.com/a/16436975 to accomodate for arrays containing objects.
-  // Also consulted: https://stackoverflow.com/a/14853974
-  // https://www.flickr.com/services/api/response.rest.html
-  // https://www.flickr.com/services/api/flickr.galleries.getPhotos.html
-  // https://www.flickr.com/services/api/misc.urls.html
-  // http://code.flickr.net/2008/08/19/standard-photos-response-apis-for-civilized-age/
-
+  /* `arraysMatch()` inspired by https://stackoverflow.com/a/16436975,
+     and modified to accomodate for arrays containing objects.
+    Also consulted for creating this helper function: 
+    https://stackoverflow.com/a/14853974
+     https://www.flickr.com/services/api/response.rest.html
+     https://www.flickr.com/services/api/flickr.galleries.getPhotos.html
+     https://www.flickr.com/services/api/misc.urls.html
+     http://code.flickr.net/2008/08/19/standard-photos-response-apis-for-civilized-age/
+  */
   arraysMatch(array1, array2) {
     if (array1 == null || array2 == null) return null
     if (array1.length !== array2.length) return null
@@ -103,32 +111,31 @@ export class LocationsDisplay extends Component {
       locations.forEach((location, i) => {
       let thisMarker = new this.props.google.maps.Marker({
         position: location.coordinates,
-        map: this.mapObject,
+        map: this.state.mapObject,
         animation: 4,
         url: location.url
       })
+      thisMarker.tabIndex = 0
       thisMarker.addListener('click', () => {
         this.onMarkerClick(markerPropsTemp[i], thisMarker, null)
       })
-      console.log(thisMarker)
       markersTemp.push(thisMarker)
-      console.log(markersTemp)
       })
       this.setState({markers: markersTemp, markerProps: markerPropsTemp}) 
     }
     
 }
 
-// Consulted: http://kylerush.net/blog/flickr-api/
-// Consulted: https://teamtreehouse.com/community/how-do-i-get-flickr-to-respond-json-that-i-can-use
+// Consulted for this function, general: http://kylerush.net/blog/flickr-api/
 /* Paticular credit to Doug Brown here as well for helping inspire this method used to retrieve an
   image from an API using a FETCH request. */
 getFlickrImage = (props, marker) => {
-  console.log("getting flikr image")
+  let altText
+  let clickedMarkerProps
   let firstImage
   let firstImageSrc
   let firstImageOwnerPage
-  let clickedMarkerProps
+  // Source for technique of setting `&nojsoncallback=1` attribute: https://teamtreehouse.com/community/how-do-i-get-flickr-to-respond-json-that-i-can-use
   let restRequest = `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${FLICKR_API_KEY}&text=${props.name}&format=json&nojsoncallback=1&sort=interestingness-desc&lat=${props.position.lat}&lon=${props.position.lng}&radius=0.3`;
   fetch(restRequest)
   .then(response => response.json())
@@ -141,16 +148,17 @@ getFlickrImage = (props, marker) => {
     } 
     if (firstImageSrc) {
     firstImageOwnerPage = `https://www.flickr.com/photos/${firstImage.owner}/`
+    altText = `Image associated with ${props.name}, fetched from Flickr. Posted by: ${firstImageOwnerPage}`
     }
-
     clickedMarkerProps = {
+      altText,
       name: props.name,
       key: props.key,
       index: props.index,
       position: props.position,
       website: props.website,
       flikrImage: firstImageSrc,
-      firstImageOwnerPage: firstImageOwnerPage
+      firstImageOwnerPage
     }
   
     this.setState({
@@ -160,12 +168,14 @@ getFlickrImage = (props, marker) => {
       showingInfoWindow: true
     })
   })
+  // Consulted for catching error: https://stackoverflow.com/a/51785817
+  .catch(function(err) {
+    alert("Unable to fetch any images from Flickr for this location at the moment.");
+  });
 }
 
 onMarkerClick = (props, marker, e) => {
-  // Source: https://stackoverflow.com/a/36396843
-  console.log(props)
-  console.log(marker)
+  // Source for `setAnimation` to bounce technique: https://stackoverflow.com/a/36396843.
   marker.setAnimation(4)
   this.getFlickrImage(props, marker)
   this.closeInfoWindow()
@@ -196,22 +206,24 @@ closeInfoWindow = () => {
     return (
       <div className="container map-component-container">
         <div className="container list-view-container">
-          {/* <OldListView */}
           <ListView
             google={this.props.google}
             ref="listView"
-            // ref="oldListView"
             locations={this.props.locations}
-            let markersList={this.state.markers}
-            let markerPropsProp={this.state.markerProps}
+            markersList={this.state.markers}
+            markerPropsProp={this.state.markerProps}
             onClickLI={this.onMarkerClick}
             onClose={this.onClose}
-            // Prop below passed through ListView down to SelectMenu component
+            // Prop below passed through ListView down to SelectMenu component.
             filterLocations={this.filterLocations}
           />
         </div>
         <div className="container map-view-container">
+          <NoMap>
           <Map 
+            // Consulted for setting `role` and `aria-role` for map: https://stackoverflow.com/a/49015889.
+            role="application"
+            aria-label="Google Map showing markers for the locations of the best views in Seattle."
             google={this.props.google}
             onReady={this.onMapReady}
             onClick={this.onMapClicked}
@@ -219,6 +231,7 @@ closeInfoWindow = () => {
             zoom={this.props.zoom}
             initialCenter={this.props.initialCenter}
           >
+          
             <InfoWindow
               marker={this.state.activeMarker}
               visible={this.state.showingInfoWindow}
@@ -227,15 +240,20 @@ closeInfoWindow = () => {
             {this.state.activeMarkerProps ? (
               <div className="container infowindow-container">
                 <h2>{this.state.activeMarkerProps.name}</h2>
-                <img src={this.state.activeMarkerProps && this.state.activeMarkerProps.flikrImage}/>
+                <img 
+                title={this.state.activeMarkerProps.name}
+                alt={this.state.activeMarkerProps.altText}
+                src={this.state.activeMarkerProps && this.state.activeMarkerProps.flikrImage}/>
                 <br></br>
                 <p className="infowindow-main-text">
                   {this.state.activeMarkerProps.flikrImage ? (
                     <p>
                       Image fetched from <a href="https:www.flickr.com">Flickr</a>; posted by 
-                      <a href={this.state.activeMarkerProps.firstImageOwnerPage}> this photographer.</a>
-                    </p>) 
-                    : <p>"No image matching our query available at this moment."</p>
+                      <a 
+                      
+                      href={this.state.activeMarkerProps.firstImageOwnerPage}> this photographer.</a>
+                    </p>
+                  ) : <p>"No image matching our query for this location available at this moment."</p>
                   }
                   <p>
                     As just one source of information about this place, you can check out 
@@ -244,11 +262,12 @@ closeInfoWindow = () => {
                   </p>
                 </p>
               </div>
-              ) : <p>"Unfortunately, we don't have any additional information about this location available at the moment. 
+              ) : <p>"Unfortunately, we don't have any additional information about this location available at the moment.<br></br> 
                 If you are looking to learn more about this place, don't hesitate to send us a line. And check back soon!"</p>
             }
             </InfoWindow>
           </Map>
+          </NoMap>
       </div>
       </div>
     );

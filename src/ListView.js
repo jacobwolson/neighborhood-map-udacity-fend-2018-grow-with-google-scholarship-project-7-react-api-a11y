@@ -19,7 +19,10 @@ class ListView extends Component {
             if (markerPropsList) {
                 markerPropsList.forEach(markerProp => {
                     const newLI = document.createElement('li')
-                    newLI.innerHTML = markerProp.name;
+                    newLI.key = markerProp.name
+                    newLI.innerHTML = markerProp.name
+                    newLI.tabIndex = 0
+                    newLI.role = "button"
                     let associatedMarker = markersList[i]
                     let associatedMarkerProps = markerPropsList[i]
                     newLI.addEventListener('click', () => clickLI(associatedMarkerProps, associatedMarker))

@@ -12,7 +12,7 @@ class SelectMenu extends Component {
     render() {
         return (
             <div className="select-menu-container">
-                <label className="filter-options-label" htmlFor="filter-options">Filter by Location</label>
+                <label tabIndex="0" className="filter-options-label" htmlFor="filter-options">Filter by Location</label>
                 <div>
                     <select 
                         id="filter-options" 

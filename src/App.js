@@ -1,4 +1,4 @@
-// Use of sort-by directly inspired by Udacity's React "Contacts App" lesson and example
+// Use of sort-by directly inspired by Udacity's React "Contacts App" lesson and example from the Front End Web Developer Nanodegree program, 2018.
 
 import React, { Component } from 'react';
 import LocationsDisplay from './LocationsDisplay'
@@ -76,14 +76,12 @@ class App extends Component {
 
   render() {
     return (
-      <div className="JSXWrapper">
+      <main>
         <div>
-          <h1>Best Views Seattle Map</h1>
+          <h1 tabIndex="0">Best Views Seattle Map</h1>
         </div>
         <div className="container">
-          {/* <LocationsDisplay */}
           <LocationsDisplay
-          // <OldMapContainer
             locations={this.state.locations}
             mapStyles={mapStyles}
             initialCenter={initialCenter}
@@ -97,7 +95,7 @@ class App extends Component {
             showNorthOfCal={this.showNorthOfCal}
           />
         </div>
-      </div>
+      </main>
     );
   }
 }

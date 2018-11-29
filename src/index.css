@@ -1,10 +1,10 @@
-/* Source: https://css-tricks.com/snippets/css/a-guide-to-flexbox/ 
-  Source: https://color.adobe.com/soft-orange-color-theme-49345/
-  Source: https://color.adobe.com/Teal-color-theme-2519833/
-  Source: https://stackoverflow.com/a/1027367
+/* Sources: https://css-tricks.com/snippets/css/a-guide-to-flexbox/ 
+   https://color.adobe.com/soft-orange-color-theme-49345/
+   https://color.adobe.com/Teal-color-theme-2519833/
+   https://stackoverflow.com/a/1027367
 */
 
-/* Styles applied to tag names */
+/* Styles applied via tag names */
 a {
   cursor: pointer;
 }
@@ -55,7 +55,7 @@ select {
   border-radius: 3px;
 }
 
-/* Consulted: https://stackoverflow.com/a/1027367 */
+/* Consulted for styling list: https://stackoverflow.com/a/1027367 */
 ul {
   list-style-type: none;
   margin: 0;
@@ -63,8 +63,7 @@ ul {
   font-size: 1.1em;
 }
 
-/* Styles applied to class names */
-
+/* Styles applied via class names */
 .container {
   display: flex;
   flex-wrap: wrap;
@@ -105,9 +104,3 @@ ul {
   min-width: 290px;
   margin: 0.1em;
 }
-
-
-
-
-
-
