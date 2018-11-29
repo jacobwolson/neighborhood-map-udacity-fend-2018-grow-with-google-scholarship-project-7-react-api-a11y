@@ -1,3 +1,14 @@
+/* Source: https://css-tricks.com/snippets/css/a-guide-to-flexbox/ 
+  Source: https://color.adobe.com/soft-orange-color-theme-49345/
+  Source: https://color.adobe.com/Teal-color-theme-2519833/
+  Source: https://stackoverflow.com/a/1027367
+*/
+
+/* Styles applied to tag names */
+a {
+  cursor: pointer;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -8,29 +19,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1 {
-  text-align: center;
-  margin-bottom: 0.1em;
-}
-
-.list-view-container {
-  width: 15em;
-  margin: 0.2em 0.75em 0.5em 0.75em;
-}
-
-#filter-options-label {
-  text-align: center;
-  margin-bottom: 0.25em; 
-}
-
-.map-view-container {
-  min-width: 290px;
-  margin: 0.1em;
-}
-
-.container {
-  display: flex;
-  flex-wrap: wrap;
+button {
+  cursor: pointer;
 }
 
 code {
@@ -38,8 +28,31 @@ code {
     monospace;
 }
 
+h1 {
+  text-align: center;
+  margin-bottom: 0.75em;
+  color: #0d6a71;
+  font-size: 2.7em;
+  max-width: 90%;
+}
+
 li {
   cursor: pointer;
+}
+
+option {
+  color: #333;
+  font-size: 1em;
+}
+
+select {
+  cursor: pointer;
+  margin-bottom: 0.22em;
+  margin-top: 0.3em;
+  color: #ff7a00;
+  font-size: 1.1em;
+  border: 2.2px solid lightblue;
+  border-radius: 3px;
 }
 
 /* Consulted: https://stackoverflow.com/a/1027367 */
@@ -47,10 +60,54 @@ ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
+  font-size: 1.1em;
 }
 
-select {
-  cursor: pointer;
-  margin-bottom: 0.22em;
-  margin-top: 0.3em;
+/* Styles applied to class names */
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
 }
+
+.filter-options-label {
+  font-size: 1.35em;
+}
+
+.infowindow-container {
+  align-items: center;
+  flex-direction: column;
+  max-width: 25em;
+}
+
+.infowindow-main-text {
+  text-align: center;
+  font-weight: 600;
+}
+
+.infowindow-main-text a {
+  display: inline;
+  clear: none;
+}
+
+.list-view-container {
+  width: 15em;
+  margin: 0.2em 0.75em 0.5em 0.75em;
+  font-weight: 600;
+  color: #222;
+}
+
+.main-container {
+  width: 75%;
+}
+
+.map-view-container {
+  min-width: 290px;
+  margin: 0.1em;
+}
+
+
+
+
+
+

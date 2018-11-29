@@ -12,24 +12,25 @@ class ListView extends Component {
         if (listViewList) {
             listViewList.innerHTML = ''
         
-        let clickLI = this.props.onClickLI
-        let i = 0;
-        let markerPropsList = this.props.markerPropsList
-        let markersList = this.props.markersList
-        markerPropsList.forEach(markerProp => {
-            const newLI = document.createElement('li')
-            newLI.innerHTML = markerProp.name;
-            let associatedMarker = markersList[i]
-            let associatedMarkerProps = markerPropsList[i]
-            newLI.addEventListener('click', () => clickLI(associatedMarkerProps, associatedMarker))
-            listViewList.appendChild(newLI)
-            i++
-        })
+            let clickLI = this.props.onClickLI
+            let i = 0;
+            let markerPropsList = this.props.markerPropsProp
+            let markersList = this.props.markersList
+            if (markerPropsList) {
+                markerPropsList.forEach(markerProp => {
+                    const newLI = document.createElement('li')
+                    newLI.innerHTML = markerProp.name;
+                    let associatedMarker = markersList[i]
+                    let associatedMarkerProps = markerPropsList[i]
+                    newLI.addEventListener('click', () => clickLI(associatedMarkerProps, associatedMarker))
+                    listViewList.appendChild(newLI)
+                    i++
+                })
+            }
         }
     }
 
     render() {
-
         return(
             <div className="list-view-container">
                 <SelectMenu

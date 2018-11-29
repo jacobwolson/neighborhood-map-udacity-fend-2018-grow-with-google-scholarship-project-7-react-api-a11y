@@ -10,22 +10,20 @@ import React, { Component } from 'react'
 class SelectMenu extends Component {
 
     render() {
-
         return (
             <div className="select-menu-container">
-                <label id="filter-options-label" for="filter-options">Filter by Location</label>
+                <label className="filter-options-label" htmlFor="filter-options">Filter by Location</label>
                 <div>
                     <select 
-                        autofocus 
                         id="filter-options" 
                         onChange={() => {
                             let selectedOption = document.getElementById('filter-options').value
-                            console.log(selectedOption)
                             this.props.filterLocations(selectedOption)
                             }
                         }
                     >
                         <option className="filter-option" value="anywhere">Anywhere</option>
+                        <option className="filter-option" value="eastOfCal">East of Cal Anderson</option>
                         <option className="filter-option" value="southOfCal">South of Cal Anderson</option>
                         <option className="filter-option" value="westOfCal">West of Cal Anderson</option>
                         <option className="filter-option" value="northOfCal">North of Cal Anderson</option>

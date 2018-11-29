@@ -715,3 +715,896 @@ class SelectMenu extends Component {
 export default SelectMenu
 
 -----------------------------------------------------------------------------------------------
+
+// let url = 'http://api.flickr.com/services/rest/?&method=flickr.people.getPublicPhotos&api_key=${FLICKR_API_KEY}&user_id=psychasec'
+    fetch(restRequest)
+
+    -----------------------------------------------------------------------------------------
+
+    
+onMarkerClick = (props, marker, e) => {
+  this.closeInfoWindow()
+  // Fetch info from Foursquare
+  // https://stackoverflow.com/a/17864016
+  // https://developer.foursquare.com/docs/api/configuration/versioning
+  this.getFlickrImages(props, marker)
+  let fsUrl = `https://api.foursquare.com/v2/venues/search?client_id=${FOURSQUARE_CLIENT_ID}&client_secret=${FOURSQUARE_CLIENT_SECRET}&v=${FOURSQUARE_VERSION}&radius=100&ll=${props.position.lat},${props.position.lng}&llAcc=200`
+  let headers = new Headers()
+  let request = new Request(fsUrl, {
+    method: 'GET',
+    headers
+  })
+  // Code from: https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be
+  let activeMarkerProps
+  fetch(request)
+    .then(response => 
+    
+      // console.log(response)
+      console.log(response)
+   )
+    .then(result => console.log(result))
+      
+      // {
+    //   let venue = this.getVenues(props, result)[0]
+    //   activeMarkerProps = {
+    //     // props that were passed in to funciton
+    //     ...props,
+    //     // foursquare data for venue
+    //     foursquare: venue
+    //   }
+    //   if (activeMarkerProps.foursquare) {
+    //     let imageUrl = `https://api.foursquare.com/v2/venues/${venue.id}/photos?client_id=${FOURSQUARE_CLIENT_ID}&client_secret=${FOURSQUARE_CLIENT_SECRET}&v=${FOURSQUARE_VERSION}`
+    //     fetch(imageUrl).then(response => response.json()).then(result => {
+    //       activeMarkerProps = {
+    //         ...activeMarkerProps,
+    //         images: result.response.photos
+    //       }
+    //       if (this.state.activeMarker)
+    //         this.state.activeMarker.setAnimation(null)
+    //         // thanks to: https://stackoverflow.com/a/36396843
+    //         marker.setAnimation(4)
+    //         {this.setState({
+    //           activeMarkerProps,
+    //           activeMarker: marker,
+    //           showingInfoWindow: true
+    //         })}
+    //     })
+    //   } else {
+    //       // marker.setAnimation(this.props.google.maps.Animation.BOUNCE)
+    //       marker.setAnimation(4)
+    //       {this.setState({
+    //         activeMarkerProps,
+    //         activeMarker: marker,
+    //         showingInfoWindow: true
+    //       })}
+    //   }
+    // })
+  }
+
+  -------------------------------------------------------
+
+  
+const FOURSQUARE_CLIENT_ID = "WBRJ0OIHLBSA0BEJ0WYUGV2EYMNV5DN25SNEGYBVCM0LPR0M"
+const FOURSQUARE_CLIENT_SECRET = "44CDSMTT0QOYYOHLTJHZOOP5OL5XDC2JZIUFWJFNSHXI0DGH"
+const FOURSQUARE_VERSION = "20181125"
+
+
+---------------------------------------------------------------------------
+
+const FLICKR_SECRET = "4c440ad4f71f5d1b"
+
+---------------------------------------------------------------------------------
+
+
+// Walkthrough consulted: https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be
+
+/* Consulted sources, general: https://scotch.io/tutorials/react-apps-with-the-google-maps-api-and-google-maps-react
+    https://github.com/fullstackreact/google-maps-react/blob/master/README.md
+*/
+// Consulted for dynamically adding markers: https://stackoverflow.com/a/43938322
+
+/* consulted: https://stackoverflow.com/a/53322289
+https://stackoverflow.com/a/47563854
+https://reactjs.org/docs/lifting-state-up.html#lifting-state-up
+// https://reactjs.org/docs/components-and-props.html
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator
+*/
+
+import React, { Component } from 'react'
+import {Map, InfoWindow, GoogleApiWrapper} from 'google-maps-react'
+import ListView from './ListView'
+
+const FLICKR_API_KEY = "2b6766fb0960cc8091819b49e304df4b"
+
+export class LocationsDisplay extends Component {
+
+  mapObject = null 
+ 
+  state = {
+    markers: [],
+    markerProps: [],
+    activeMarker: null,
+    activeMarkerProps: null,
+    showingInfoWindow: false         
+  };
+
+  markersArray = []
+  markerPropsArray = []
+  
+  onMapReady = (mapProps, map) => {
+    this.mapObject = map
+    this.updateMarkers(this.props.locations)
+    this.refs.listView.populateList()
+  }
+
+  componentDidUpdate() {
+    this.updateMarkers(this.props.locations)
+    this.refs.listView.populateList()
+  }
+
+  // Modified from https://stackoverflow.com/a/16436975 to accomodate for arrays containing objects.
+  // Also consulted: https://stackoverflow.com/a/14853974
+  // https://www.flickr.com/services/api/response.rest.html
+  // https://www.flickr.com/services/api/flickr.galleries.getPhotos.html
+  // https://www.flickr.com/services/api/misc.urls.html
+  // http://code.flickr.net/2008/08/19/standard-photos-response-apis-for-civilized-age/
+
+  arraysMatch(array1, array2) {
+    if (array1 == null || array2 == null) return null
+    if (array1.length != array2.length) return null
+    let i = 0
+    let testArray = []
+    array1.forEach(item => {
+        if (item.name === array2[i].name) {
+          testArray.push("match")
+        }
+        i++
+      }
+    )
+    if (testArray.length === array2.length) {
+      return true 
+    } else {
+      return null
+    }
+  }
+
+  updateMarkers = (locations) => {
+    let markerPropsTemp = []
+    let markersTemp = []
+    
+    // Create and store an object containing the 
+    locations.forEach((location, i) => {
+      let theseMarkerProps = {
+        name: location.name,
+        key: i,
+        index: i,
+        position: location.coordinates,
+        website: location.website
+      }
+      markerPropsTemp.push(theseMarkerProps)
+    });
+
+    // Variable for guard, below
+    let arraysMatch = this.arraysMatch(this.state.markerProps, markerPropsTemp)
+
+    /* This `if` statement acts as a guard: if the current marker info saved in this component's state,
+       as checked via `markerProps`, is an exact match for the current "locations" data, then do 
+       not proceed with creating new markers and updating state. This guard avoids a `setState()`-induced
+       feedback loop. */
+    if (!arraysMatch) {
+      this.state.markers.forEach(marker => marker.setMap(null))
+      locations.forEach((location, i) => {
+      let thisMarker = new this.props.google.maps.Marker({
+        position: location.coordinates,
+        map: this.mapObject,
+        animation: 4,
+        url: location.url
+      })
+      thisMarker.addListener('click', () => {
+        this.onMarkerClick(markerPropsTemp[i], thisMarker, null)
+      })
+      markersTemp.push(thisMarker)
+      })
+      this.setState({markers: markersTemp, markerProps: markerPropsTemp}) 
+    }
+}
+
+// Code from: https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be
+getVenues = (props, data) => {
+  return data
+        .response
+        .venues
+        .filter(item => item.name.includes(props.name) || props.name.includes(item.name))
+}
+
+// Consulted: http://kylerush.net/blog/flickr-api/
+// Consulted: https://teamtreehouse.com/community/how-do-i-get-flickr-to-respond-json-that-i-can-use
+getFlickrImage = (props, marker) => {
+  let firstImage
+  let firstImageSrc
+  let firstImageOwnerPage
+  let clickedMarkerProps
+  let restRequest = `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${FLICKR_API_KEY}&text=${props.name}+Seattle&format=json&&nojsoncallback=1`;
+  fetch(restRequest)
+  .then(response => response.json())
+  .then(parsedResponse => {
+    firstImage = parsedResponse.photos.photo[0];
+    firstImageSrc = `https://farm${firstImage.farm}.staticflickr.com/${firstImage.server}/${firstImage.id}_${firstImage.secret}_m.jpg`
+    firstImageOwnerPage = `https://www.flickr.com/photos/${firstImage.owner}/`
+
+    clickedMarkerProps = {
+      name: props.name,
+      key: props.key,
+      index: props.index,
+      position: props.position,
+      website: props.website,
+      flikrImage: firstImageSrc,
+      firstImageOwnerPage: firstImageOwnerPage
+    }
+  
+  this.setState({
+    activeMarkerProps: clickedMarkerProps,
+    activeMarker: marker,
+    flikrImage: firstImageSrc,
+    showingInfoWindow: true
+  })
+})
+}
+
+onMarkerClick = (props, marker, e) => {
+  this.closeInfoWindow()
+  // Source: https://stackoverflow.com/a/36396843
+  marker.setAnimation(4)
+  this.getFlickrImage(props, marker)
+}
+      
+closeInfoWindow = () => {
+    this.setState({
+      activeMarker: null,
+      activeMarkerProps: null,
+      showingInfoWindow: false
+    })
+}
+
+  onMapClicked = () => {
+    this.closeInfoWindow()
+  }
+
+  filterLocations = (selectedOption) => {
+    selectedOption === 'anywhere' ? this.props.showAll()
+    : selectedOption === 'southOfCal' ? this.props.showSouthOfCal()
+    : selectedOption === 'westOfCal' ? this.props.showWestOfCal()
+    : selectedOption === 'northOfCal' && this.props.showNorthOfCal()
+  }
+
+  render() {
+    return (
+      <div className="container map-component-container">
+        <div className="container list-view-container">
+          <ListView
+            google={this.props.google}
+            locations={this.props.locations}
+            let markersList={this.state.markers}
+            let markerPropsList={this.state.markerProps}
+            onClickLI={this.onMarkerClick}
+            onClose={this.onClose}
+            buttonOneOnClick={this.props.buttonOneOnClick}
+            buttonOneText={this.props.buttonOneText}
+            buttonTwoOnClick={this.props.buttonTwoOnClick}
+            buttonTwoText={this.props.buttonTwoText}
+            For SelectMenu component
+            filterLocations={this.filterLocations}
+          />
+        </div>
+        <div className="container map-view-container">
+          <Map 
+            google={this.props.google}
+            onReady={this.onMapReady}
+            onClick={this.onMapClicked}
+            style={this.props.mapStyles} 
+            zoom={this.props.zoom}
+            initialCenter={this.props.initialCenter}
+          >
+            <InfoWindow
+              marker={this.state.activeMarker}
+              visible={this.state.showingInfoWindow}
+              onClose={this.closeInfoWindow}
+            >
+            {this.state.activeMarkerProps ? (
+              <div className="container infowindow-container">
+                <h2>{this.state.activeMarkerProps.name}</h2>
+                <img src={this.state.activeMarkerProps && this.state.activeMarkerProps.flikrImage}/>
+                <br></br>
+                <p className="infowindow-main-text">
+                  Image from <a href="https:www.flickr.com">Flickr</a>, posted by 
+                  <a href={this.state.activeMarkerProps.firstImageOwnerPage}> this photographer.</a>
+                  <br></br><br></br>
+                  As just one source for more information about this place, you can check out
+                  <a href={this.state.activeMarkerProps && this.state.activeMarkerProps.website}> Seattle Park's and Recreation's page about the site.</a> 
+                </p>
+              </div>
+              ) : <p>"Unfortunately, we don't have any additional information about this location available at the moment. If you are looking to learn more about this place,  don't hesitate to send us a line, and check back soon!"</p>
+            }
+            </InfoWindow>
+          </Map>
+      </div>
+      </div>
+    );
+  }
+}
+ 
+export default GoogleApiWrapper({
+  apiKey: 'AIzaSyBvmvRFjknv-wc3F8y_SZc1WTy_rLRfW3o'
+})(LocationsDisplay)
+
+---------------------------------------------------------------------------------------
+
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: http://bit.ly/CRA-PWA
+
+-------------------------------------------------------------------------------------------
+
+// Code from: https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be
+getVenues = (props, data) => {
+  return data
+        .response
+        .venues
+        .filter(item => item.name.includes(props.name) || props.name.includes(item.name))
+}
+
+--------------------------------------------------------------------------------------
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>Best Views Seattle Map</title>
+    <!-- <link rel="stylesheet" href="https://bootswatch.com/4/sandstone/bootstrap.min.css"> -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvmvRFjknv-wc3F8y_SZc1WTy_rLRfW3o"></script>
+  </head>
+  <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
+</html>
+
+
+------------------------------------------
+
+
+ markerPropsArray = []
+    markersArray = []
+
+    // Consulted for creating and adding new LI: https://www.w3schools.com/jsref/met_node_appendchild.asp
+    // Code for clearing list: https://stackoverflow.com/a/27324794
+    populateList = () => {
+        const listViewList = document.getElementById('list-view-list')
+        if (listViewList) {
+            listViewList.innerHTML = ''
+        
+        let clickLI = this.props.onClickLI
+        let i = 0;
+        let markerPropsArray = this.props.markerPropsProp
+        let markersList = this.props.markersList
+        let associatedMarker
+        let associatedMarkerProps
+        let newLI
+        if (markerPropsArray) {
+            markerPropsArray.forEach(markerProp => {
+                newLI = document.createElement('li')
+                newLI.innerHTML = markerProp.name;
+                associatedMarker = markersList[i]
+                associatedMarkerProps = markerPropsArray[i]
+                newLI.addEventListener('click', () => clickLI(associatedMarkerProps, associatedMarker))
+                listViewList.appendChild(newLI)
+                i++
+                })
+            }
+        }
+    }
+
+    render() {
+        return(
+            <div className="list-view-container">
+                <SelectMenu
+                    filterLocations={this.props.filterLocations}
+                />
+                <ul id="list-view-list">
+                {/* An appropriately filtered list of locations will go here
+                    whenever `.populateList()` is invoked.
+                */}
+                </ul>
+            </div>
+        )
+    }
+}
+
+-----------------------------------------------------
+
+
+// Based on https://github.com/jacobwolson/google-maps-react/blob/master/src/components/Marker.js
+
+import React from 'react'
+import PropTypes from 'prop-types'
+
+import { camelize } from '../lib/String'
+
+const evtNames = [
+  'click',
+  'dblclick',
+  'dragend',
+  'mousedown',
+  'mouseout',
+  'mouseover',
+  'mouseup',s
+  'recenter',
+];
+
+const wrappedPromise = function() {
+    var wrappedPromise = {},
+        promise = new Promise(function (resolve, reject) {
+            wrappedPromise.resolve = resolve;
+            wrappedPromise.reject = reject;
+        });
+    wrappedPromise.then = promise.then.bind(promise);
+    wrappedPromise.catch = promise.catch.bind(promise);
+    wrappedPromise.promise = promise;
+
+    return wrappedPromise;
+}
+
+export class Marker extends React.Component {
+
+  componentDidMount() {
+    this.markerPromise = wrappedPromise();
+    this.renderMarker();
+    this.storeMarkerRefs();
+  }
+
+  componentDidUpdate(prevProps) {
+    if ((this.props.map !== prevProps.map) ||
+      (this.props.position !== prevProps.position) ||
+      (this.props.icon !== prevProps.icon)) {
+        if (this.marker) {
+            this.marker.setMap(null);
+        }
+        this.renderMarker();
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.marker) {
+      this.marker.setMap(null);
+    }
+  }
+
+  renderMarker() {
+    const {
+      map,
+      google,
+      position,
+      mapCenter,
+      icon,
+      label,
+      draggable,
+      title,
+      ...props
+    } = this.props;
+    if (!google) {
+      return null
+    }
+
+    let pos = position || mapCenter;
+    if (!(pos instanceof google.maps.LatLng)) {
+      pos = new google.maps.LatLng(pos.lat, pos.lng);
+    }
+
+    const pref = {
+      map,
+      position: pos,
+      icon,
+      label,
+      title,
+      draggable,
+      ...props
+    };
+    this.marker = new google.maps.Marker(pref);
+
+    evtNames.forEach(e => {
+      this.marker.addListener(e, this.handleEvent(e));
+    });
+
+    this.markerPromise.resolve(this.marker);
+  }
+
+  getMarker() {
+    return this.markerPromise;
+  }
+
+  handleEvent(evt) {
+    return (e) => {
+      const evtName = `on${camelize(evt)}`
+      if (this.props[evtName]) {
+        this.props[evtName](this.props, this.marker, e);
+      }
+    }
+  }
+
+  render() {
+    return null;
+  }
+}
+
+Marker.propTypes = {
+  position: PropTypes.object,
+  map: PropTypes.object
+}
+
+evtNames.forEach(e => Marker.propTypes[e] = PropTypes.func)
+
+Marker.defaultProps = {
+  name: 'Marker'
+}
+
+export default Marker
+
+
+---------------------------------------------------
+
+import React, { Component } from 'react'
+import SelectMenu from './SelectMenu'
+class OldListView extends Component {
+    
+    markerPropsArray = []
+    markersArray = []
+
+    // Consulted for creating and adding new LI: https://www.w3schools.com/jsref/met_node_appendchild.asp
+    // Code for clearing list: https://stackoverflow.com/a/27324794
+    populateList = () => {
+        const listViewList = document.getElementById('list-view-list')
+        if (listViewList) {
+            listViewList.innerHTML = ''
+        
+        let clickLI = this.props.onClickLI
+        let i = 0;
+        let markerPropsList = this.props.markerPropsProp
+        let markersList = this.props.markersList
+        if (markerPropsList) {
+        markerPropsList.forEach(markerProp => {
+            const newLI = document.createElement('li')
+            newLI.innerHTML = markerProp.name;
+            let associatedMarker = markersList[i]
+            let associatedMarkerProps = markerPropsList[i]
+            newLI.addEventListener('click', () => clickLI(associatedMarkerProps, associatedMarker))
+            listViewList.appendChild(newLI)
+            i++
+        })
+        }
+        }
+    }
+
+    render() {
+
+        return(
+            <div className="list-view-container">
+                <SelectMenu
+                    filterLocations={this.props.filterLocations}
+                />
+                <ul id="list-view-list">
+                {/* An appropriately filtered list of our locations will go here whenever the `.populateList()` method is invoked.
+                */}
+                </ul>
+            </div>
+        )
+    }
+}
+
+export default OldListView
+
+------------------------------------------------------
+
+// Walkthrough consulted: https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be
+
+/* Consulted sources, general: https://scotch.io/tutorials/react-apps-with-the-google-maps-api-and-google-maps-react
+    https://github.com/fullstackreact/google-maps-react/blob/master/README.md
+*/
+// Consulted for dynamically adding markers: https://stackoverflow.com/a/43938322
+
+/* consulted: https://stackoverflow.com/a/53322289
+https://stackoverflow.com/a/47563854
+https://reactjs.org/docs/lifting-state-up.html#lifting-state-up
+*/
+
+import React, { Component } from 'react'
+import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react'
+import ListView from './ListView'
+import OldListView from './OldListView'
+
+const FOURSQUARE_CLIENT_ID = "WBRJ0OIHLBSA0BEJ0WYUGV2EYMNV5DN25SNEGYBVCM0LPR0M"
+const FOURSQUARE_CLIENT_SECRET = "44CDSMTT0QOYYOHLTJHZOOP5OL5XDC2JZIUFWJFNSHXI0DGH"
+const FOURSQUARE_VERSION = "20181125"
+
+export class OldMapContainer extends Component {
+
+  mapObject = null 
+ 
+  state = {
+    // mapObject: null,
+    markers: [],
+    markerProps: [],
+    activeMarker: null,
+    activeMarkerProps: null,
+    showingInfoWindow: false,          
+  };
+
+  markersArray = []
+  markerPropsArray = []
+  
+  onMapReady = (mapProps, map) => {
+    console.log("Map ready!")
+    this.mapObject = map
+    this.updateMarkers(this.props.locations)
+    // this.refs.listView.populateList()
+    this.refs.oldListView.populateList()
+  }
+
+  componentDidUpdate() {
+    this.updateMarkers(this.props.locations)
+    // this.refs.listView.populateList()
+    this.refs.oldListView.populateList()
+  }
+
+  // Modified from: https://stackoverflow.com/a/16436975
+  // Also consulted: https://stackoverflow.com/a/14853974
+  arraysMatch(array1, array2) {
+    if (array1 == null || array2 == null) return null
+    if (array1.length != array2.length) return null
+    let i = 0
+    let testArray = []
+    array1.forEach(item => {
+        if (item.name === array2[i].name) {
+          testArray.push("match")
+        }
+        i++
+      }
+    )
+    if (testArray.length === array2.length) {
+      return true 
+    } else {
+      return null
+    }
+  }
+
+  updateMarkers = (locations) => {
+    console.log("Updating markers")
+    if (!locations) {
+      console.log("no locations available")
+      return
+    }
+    
+    let markerPropsTemp = []
+    let markersTemp = []
+    
+    locations.forEach((location, i) => {
+      let theseMarkerProps = {
+        name: location.name,
+        key: i,
+        index: i,
+        position: location.coordinates,
+        url: location.url
+      }
+      markerPropsTemp.push(theseMarkerProps)
+    });
+
+    // let testArray = []
+    // if (this.state.markerProps.filter(markerProp => markerProp.name).length !== 0) {
+    //   testArray = this.state.markerProps.filter((markerProp, i) => markerProp.name === markerPropsTemp[i].name)
+    // }
+    // https://stackoverflow.com/a/16436975
+
+    let arraysMatch = this.arraysMatch(this.state.markerProps, markerPropsTemp)
+    if (!arraysMatch) {
+      this.state.markers.forEach(marker => marker.setMap(null))
+      locations.forEach((location, i) => {
+      let animation = 4
+      let thisMarker = new this.props.google.maps.Marker({
+        position: location.coordinates,
+        map: this.mapObject,
+        animation: animation,
+        url: location.url
+      })
+      thisMarker.addListener('click', () => {
+        this.onMarkerClick(markerPropsTemp[i], thisMarker, null)
+      })
+      markersTemp.push(thisMarker)
+      return thisMarker
+      })
+      this.setState({markers: markersTemp, markerProps: markerPropsTemp}) 
+    }
+}
+
+// Code from: https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be
+getVenues = (props, data) => {
+  return data
+        .response
+        .venues
+        .filter(item => item.name.includes(props.name) || props.name.includes(item.name))
+}
+
+onMarkerClick = (props, marker, e) => {
+  console.log("On Marker Click Invoked")
+  this.closeInfoWindow()
+  // Fetch info from Foursquare
+  // https://stackoverflow.com/a/17864016
+  // https://developer.foursquare.com/docs/api/configuration/versioning
+  let fsUrl = `https://api.foursquare.com/v2/venues/search?client_id=${FOURSQUARE_CLIENT_ID}&client_secret=${FOURSQUARE_CLIENT_SECRET}&v=${FOURSQUARE_VERSION}&radius=100&ll=${props.position.lat},${props.position.lng}&llAcc=200`
+  let headers = new Headers()
+  let request = new Request(fsUrl, {
+    method: 'GET',
+    headers
+  })
+  // Code from: https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be
+  let activeMarkerProps
+  fetch(request)
+    .then(response => response.json())
+    .then(result => {
+      let venue = this.getVenues(props, result)[0]
+      activeMarkerProps = {
+        // props that were passed in to funciton
+        ...props,
+        // foursquare data for venue
+        foursquare: venue
+      }
+      if (activeMarkerProps.foursquare) {
+        let imageUrl = `https://api.foursquare.com/v2/venues/${venue.id}/photos?client_id=${FOURSQUARE_CLIENT_ID}&client_secret=${FOURSQUARE_CLIENT_SECRET}&v=${FOURSQUARE_VERSION}`
+        fetch(imageUrl).then(response => response.json()).then(result => {
+          activeMarkerProps = {
+            ...activeMarkerProps,
+            images: result.response.photos
+          }
+          if (this.state.activeMarker)
+            this.state.activeMarker.setAnimation(null)
+            // marker.setAnimation(this.props.google.maps.Animation.BOUNCE)
+            // thanks to: https://stackoverflow.com/a/36396843
+            marker.setAnimation(4)
+            {this.setState({
+              activeMarkerProps,
+              activeMarker: marker,
+              showingInfoWindow: true
+            })}
+        })
+      } else {
+          // marker.setAnimation(this.props.google.maps.Animation.BOUNCE)
+          marker.setAnimation(4)
+          {this.setState({
+            activeMarkerProps,
+            activeMarker: marker,
+            showingInfoWindow: true
+          })}
+      }
+    })
+  }
+      
+closeInfoWindow = () => {
+  if (this.state.activeMarker) {
+    this.state.activeMarker.setAnimation(null)
+    this.setState({
+      activeMarker: null,
+      activeMarkerProps: null,
+      showingInfoWindow: false
+    })
+  }
+}
+
+  onMapClicked = (props) => {
+    if (this.state.showingInfoWindow) {
+      this.setState({
+        showingInfoWindow: false,
+        activeMarker: null
+      })
+    }
+  }
+
+  filterLocations = (selectedOption) => {
+    selectedOption === 'anywhere' 
+    ? this.props.showAll()
+    : selectedOption === 'southOfCal' 
+    ? this.props.showSouthOfCal()
+    : selectedOption === 'westOfCal'
+    ? this.props.showWestOfCal()
+    : selectedOption === 'northOfCal' 
+    && this.props.showNorthOfCal()
+  }
+
+  render() {
+    return (
+      <div className="container map-component-container">
+        <div className="container list-view-container">
+          <OldListView
+            // ListView ..
+            google={this.props.google}
+            // ref="listView"
+            ref="oldListView"
+            locations={this.props.locations}
+            let markersList={this.state.markers}
+            let markerPropsProp={this.state.markerProps}
+            onClickLI={this.onMarkerClick}
+            onClose={this.onClose}
+            buttonOneOnClick={this.props.buttonOneOnClick}
+            buttonOneText={this.props.buttonOneText}
+            buttonTwoOnClick={this.props.buttonTwoOnClick}
+            buttonTwoText={this.props.buttonTwoText}
+            For SelectMenu component
+            filterLocations={this.filterLocations}
+          />
+        </div>
+        <div className="container map-view-container">
+          <Map 
+            google={this.props.google}
+            onReady={this.onMapReady}
+            onClick={this.onMapClicked}
+            style={this.props.mapStyles} 
+            zoom={this.props.zoom}
+            initialCenter={this.props.initialCenter}
+          >
+            <InfoWindow
+              marker={this.state.activeMarker}
+              visible={this.state.showingInfoWindow}
+              onClose={this.closeInfoWindow}
+            >
+              <div>
+                <h4>{this.state.activeMarkerProps && this.state.activeMarkerProps.name}</h4>
+                {this.state.activeMarkerProps && (
+                  <img src={this.state.activeMarkerProps.images && this.state.activeMarkerProps.images.items[0].prefix + "100x100" + this.state.activeMarkerProps.images.items[0].suffix}/>
+                  )
+                }
+                <div>
+                  <a href={this.state.activeMarkerProps && this.state.activeMarkerProps.url}>Website</a>
+                </div>
+              </div>
+            </InfoWindow>
+          </Map>
+      </div>
+      </div>
+    );
+  }
+}
+ 
+export default GoogleApiWrapper({
+  apiKey: 'AIzaSyBvmvRFjknv-wc3F8y_SZc1WTy_rLRfW3o'
+})(OldMapContainer)
+
+----------------------------------------------------------------
+
