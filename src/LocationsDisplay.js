@@ -5,8 +5,8 @@ particular influnce on this component.
 */
 
 /* Sources consulted for incorporating a Google map with dynamic markers in a React app using google-maps-react, general: 
-  https://scotch.io/tutorials/react-apps-with-the-google-maps-api-and-google-maps-react
-  https://github.com/fullstackreact/google-maps-react/blob/master/README.md
+  Article by Rachel Njeri: https://scotch.io/tutorials/react-apps-with-the-google-maps-api-and-google-maps-react
+  Article by Ari Lerner: https://www.fullstackreact.com/articles/how-to-write-a-google-maps-react-component/
 */
 
 // Consulted for dynamically adding markers: https://stackoverflow.com/a/43938322
