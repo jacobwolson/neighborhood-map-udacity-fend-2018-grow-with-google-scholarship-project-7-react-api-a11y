@@ -227,7 +227,7 @@ closeInfoWindow = () => {
             google={this.props.google}
             onReady={this.onMapReady}
             onClick={this.onMapClicked}
-            style={this.props.mapStyles} 
+            style={this.props.mapStyles}
             zoom={this.props.zoom}
             initialCenter={this.props.initialCenter}
           >
