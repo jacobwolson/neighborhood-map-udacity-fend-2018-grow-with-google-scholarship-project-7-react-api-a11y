@@ -4,13 +4,13 @@ a {
 }
 
 body {
-  margin: 0;
-  padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
-  -webkit-font-smoothing: antialiased;
+  margin: 0;
+  padding: 0;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
 }
 
 button {
@@ -23,15 +23,22 @@ code {
 }
 
 h1 {
-  text-align: center;
-  margin-bottom: 0.75em;
   color: #0d6a71;
-  font-size: 2.7em;
-  max-width: 90%;
+  font-size: 2.5em;
+  margin-bottom: 0.75em;
+  margin-left: 10%;
+  margin-right: 10%;
+  text-align: center;
+  text-align: center;
 }
 
 h3 {
   margin-bottom: 0.2em;
+}
+
+img {
+  border: 0.2px solid black;
+  max-width: 90%;
 }
 
 li {
@@ -44,29 +51,28 @@ option {
 }
 
 select {
+  border: 2.2px solid lightblue;
+  border-radius: 3px;
+  /* Source: https://color.adobe.com/soft-orange-color-theme-49345/ */
+  color: #ff7a00;
   cursor: pointer;
   margin-bottom: 0.11em;
   margin-top: 0.15em;
-  /* Source: https://color.adobe.com/soft-orange-color-theme-49345/ */
-  color: #ff7a00;
   font-size: 1.1em;
   font-weight: 600;
-  border: 2.2px solid lightblue;
-  border-radius: 3px;
   padding: 0.2em;
 }
 
 /* Consulted for styling list: https://stackoverflow.com/a/1027367 */
 ul {
+  font-size: 1.1em;
   list-style-type: none;
   margin: 0;
   padding: 0;
-  font-size: 1.1em;
 }
 
 /* Styles applied via class names */
 /* Source consulted for flexbox: https://css-tricks.com/snippets/css/a-guide-to-flexbox/ */
-
 .container {
   display: flex;
   flex-wrap: wrap;
@@ -76,20 +82,32 @@ ul {
   font-size: 1.35em;
 }
 
+.gm-ui-hover-effect > {
+  height: 100px;
+}
+
+.has-image-display {
+  text-align: center;
+  max-width: 90%;
+}
+
 .infowindow-container {
   align-items: center;
-  flex-direction: column;
   max-width: 25em;
+  flex-direction: column;
+  font-size: 1.3em;
+  font-weight: 500;
 }
 
 .infowindow-main-text {
-  text-align: center;
   font-weight: 600;
+  font-size: 1.1em;
+  text-align: center;
 }
 
 .infowindow-main-text a {
-  display: inline;
   clear: none;
+  display: inline;
 }
 
 .locations-list-button {
@@ -104,24 +122,47 @@ ul {
 }
 
 .list-view-container {
-  width: 15em;
-  margin: 0.2em 0.75em 0.5em 0.75em;
-  font-weight: 600;
   color: #222;
-}
-
-.main-container {
-  width: 75%;
+  font-weight: 600;
+  margin: 0.2em 0.75em 0.5em 0.75em;
+  max-width: 15em;
+  margin: auto;
+  padding: 0.5em;
 }
 
 .map-loading-message, .map-load-error-message {
-    /* https://color.adobe.com/gold-color-scheme-burnt-orange-color-palette-color-theme-9841276/ */
-    color: #370526;
-    margin: auto;
-    width: 65%;
-  }
+  /* https://color.adobe.com/gold-color-scheme-burnt-orange-color-palette-color-theme-9841276/ */
+  color: #370526;
+  margin: auto;
+  width: 65%;
+  text-align: center;
+  font-size: 2em;
+}
 
 .map-view-container {
-  min-width: 290px;
-  margin: 0.1em;
+  box-sizing: border-box;
+  margin: 0;
+  max-width: 300px;
+  min-width: 200px;
+  overflow: none;
+}
+
+.no-image-display {
+  border: 1.5px solid #111;
+  border-radius: 5x;
+  margin: 0;
+  padding: 0.2em 0.4em;
+}
+
+.no-map-message-container {
+  margin: auto;
+  width: 50%;
+  top: 500px;
+  /* Consulted for centering in the viewport technique: 
+  * https://www.w3.org/Style/Examples/007/center.en.html */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
 }

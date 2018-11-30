@@ -1,34 +1,28 @@
 /* Project coach Doug Brown's walkthrough was consulted in the course of completing this project, and had 
-  particular influnce on this component. 
-  https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be,
-  Step 1, addressing getting the map initially loaded to the page and storing data and loading it to the map, 
-  step 2, addressing loading markers to the map, storing marker data in state and connecting info windows with markers, 
-  and step 3, addressing loading data to info windows from an external API, and the sections on handling errors for the map 
-  and turning on the service worker, were viewed, and were a source of inpriation and instruction 
-  for my code, and a great learning resource as well.
+  particular influence on on this component: https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be,
 */
 
-/* Sources consulted for incorporating a Google map with dynamic markers in a React app using google-maps-react, general: 
-  Article by Rachel Njeri: https://scotch.io/tutorials/react-apps-with-the-google-maps-api-and-google-maps-react
-  Article by Ari Lerner: https://www.fullstackreact.com/articles/how-to-write-a-google-maps-react-component/
+/* Other sources consulted for incorporating a Google map with dynamic markers in a React app using google-maps-react:
+  article by Rachel Njeri: https://scotch.io/tutorials/react-apps-with-the-google-maps-api-and-google-maps-react
+  article by Ari Lerner: https://www.fullstackreact.com/articles/how-to-write-a-google-maps-react-component/
 */
 
-// Consulted for dynamically adding markers: https://stackoverflow.com/a/43938322
+// Consulted for dynamically adding markers: https://stackoverflow.com/a/43938322.
 
-/* Also consulted, general:
-https://stackoverflow.com/a/53322289
+/* Also consulted as general resources for creating this app:
 https://stackoverflow.com/a/47563854
 https://reactjs.org/docs/lifting-state-up.html#lifting-state-up
 https://reactjs.org/docs/components-and-props.html
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator
 */
 
-// Additional sources are referenced above lines or blocks of relevant code throughout the document.
+// Additional sources pertinent to particular items are referenced above lines or blocks of relevant code throughout the document.
 
 import React, { Component } from 'react'
 import {Map, InfoWindow, GoogleApiWrapper} from 'google-maps-react'
 import ListView from './ListView'
 import NoMap from './NoMap'
+import mapStyles from '../styles/mapStyles'
 
 const GOOGLE_MAPS_API_KEY = "AIzaSyBvmvRFjknv-wc3F8y_SZc1WTy_rLRfW3o"
 const FLICKR_API_KEY = "2b6766fb0960cc8091819b49e304df4b"
@@ -72,12 +66,11 @@ export class LocationsDisplay extends Component {
     let i = 0
     let testArray = []
     array1.forEach(item => {
-        if (item.name === array2[i].name) {
-          testArray.push("match")
-        }
-        i++
+      if (item.name === array2[i].name) {
+        testArray.push("match")
       }
-    )
+      i++
+    })
     if (testArray.length === array2.length) {
       return true 
     } else {
@@ -127,74 +120,92 @@ export class LocationsDisplay extends Component {
       })
       this.setState({markers: markersTemp, markerProps: markerPropsTemp}) 
     }
-    
-}
+  }
 
-// Consulted for this function, general: http://kylerush.net/blog/flickr-api/
-/* Paticular credit to Doug Brown here as well for helping inspire this method used to retrieve an
-  image from an API using a FETCH request. */
-getFlickrImage = (props, marker) => {
-  let altText
-  let clickedMarkerProps
-  let firstImage
-  let firstImageSrc
-  let firstImageOwnerPage
-  // Source for technique of setting `&nojsoncallback=1` attribute: https://teamtreehouse.com/community/how-do-i-get-flickr-to-respond-json-that-i-can-use
-  let restRequest = `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${FLICKR_API_KEY}&text=${props.name}&format=json&nojsoncallback=1&sort=interestingness-desc&lat=${props.position.lat}&lon=${props.position.lng}&radius=0.3`;
-  fetch(restRequest)
-  .then(response => response.json())
-  .then(parsedResponse => {
-    if (parsedResponse) {
-      firstImage = parsedResponse.photos.photo[0]
-    } 
-    if (firstImage) {
-      firstImageSrc = `https://farm${firstImage.farm}.staticflickr.com/${firstImage.server}/${firstImage.id}_${firstImage.secret}_m.jpg`
-    } 
-    if (firstImageSrc) {
-    firstImageOwnerPage = `https://www.flickr.com/photos/${firstImage.owner}/`
-    altText = `Image associated with ${props.name}, fetched from Flickr. Posted by: ${firstImageOwnerPage}`
-    }
-    clickedMarkerProps = {
-      altText,
+  // Consulted for this function, general: http://kylerush.net/blog/flickr-api/
+  /* Paticular credit to Doug Brown in his walkthrough here as well for helping inspire the 
+   * technique used to retrieve an image from an API using a FETCH request.
+  */
+  requestFlickrImage = (props, marker) => {
+    let altText
+    let firstImage
+    let firstImageSrc
+    let firstImageOwnerPage
+    let clickedMarkerProps = {
       name: props.name,
       key: props.key,
       index: props.index,
       position: props.position,
-      website: props.website,
-      flikrImage: firstImageSrc,
-      firstImageOwnerPage
+      website: props.website
     }
-  
-    this.setState({
-      activeMarkerProps: clickedMarkerProps,
-      activeMarker: marker,
-      flikrImage: firstImageSrc,
-      showingInfoWindow: true
+    const ifNoImage = () => {
+      this.setState({
+        activeMarkerProps: clickedMarkerProps,
+        activeMarker: marker,
+        flikrImage: null,
+        showingInfoWindow: true
+      })
+    }
+    /* Consulted for using `.bind()` method: 
+    * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind
+    */
+    const boundIfNoImage = ifNoImage.bind(LocationsDisplay)
+    /* Source for technique of setting `&nojsoncallback=1` argument: 
+    * https://teamtreehouse.com/community/how-do-i-get-flickr-to-respond-json-that-i-can-use
+    */
+    // Source for photos.search API method: https://www.flickr.com/services/api/flickr.photos.search.html
+    const restRequest = `https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=${FLICKR_API_KEY}&text=${props.name}&format=json&nojsoncallback=1&sort=interestingness-desc&lat=${props.position.lat}&lon=${props.position.lng}&radius=0.3`;
+    fetch(restRequest).then(response => response.json()).then(parsedResponse => {
+      if (parsedResponse) {
+        firstImage = parsedResponse.photos.photo[0]
+      } 
+      if (firstImage) {
+        // Source: https://www.flickr.com/services/api/misc.urls.html
+        firstImageSrc = `https://farm${firstImage.farm}.staticflickr.com/${firstImage.server}/${firstImage.id}_${firstImage.secret}_m.jpg`
+      } 
+      if (firstImageSrc) {
+      firstImageOwnerPage = `https://www.flickr.com/photos/${firstImage.owner}/`
+      altText = `Image associated with ${props.name}, fetched from Flickr. Posted by: ${firstImageOwnerPage}`
+      }
+      // Consulted for use of spread operator: https://dmitripavlutin.com/object-rest-spread-properties-javascript/
+      clickedMarkerProps = {
+        ...clickedMarkerProps,
+        altText,
+        flikrImage: firstImageSrc,
+        firstImageOwnerPage
+      }
+      this.setState({
+        activeMarkerProps: clickedMarkerProps,
+        activeMarker: marker,
+        flikrImage: firstImageSrc,
+        showingInfoWindow: true
+      })
     })
-  })
-  // Consulted for catching error: https://stackoverflow.com/a/51785817
-  /* App will both send an alert to users, and display a message in the info window, if
-  * it was not able to retrieve an image from Flikr.
-  .catch(function(err) {
-    alert("Unable to fetch any images from Flickr for this location at the moment.");
-  });
-}
+    // Consulted for catching error: https://stackoverflow.com/a/51785817
+    /* If there is a failure attempting to retrieve an image, an alert will display, then
+    * the marker's info window will display with a message in lieu of an image and 
+    * concomitant information. See `.render()` below for details.
+    */
+    .catch(function(err) {
+      alert("Unable to fetch any images from Flickr for this location at the moment.")
+      boundIfNoImage()
+    })
+  }
 
-onMarkerClick = (props, marker, e) => {
-  // Source for `setAnimation` to bounce technique: https://stackoverflow.com/a/36396843.
-  marker.setAnimation(4)
-  this.getFlickrImage(props, marker)
-  this.closeInfoWindow()
-
-}
+  onMarkerClick = (props, marker, e) => {
+    // Source for `setAnimation` to bounce technique: https://stackoverflow.com/a/36396843.
+    marker.setAnimation(4)
+    this.requestFlickrImage(props, marker)
+    this.closeInfoWindow()
+  }
       
-closeInfoWindow = () => {
+  closeInfoWindow = () => {
     this.setState({
       activeMarker: null,
       activeMarkerProps: null,
       showingInfoWindow: false
     })
-}
+  }
 
   onMapClicked = () => {
     this.closeInfoWindow()
@@ -210,11 +221,10 @@ closeInfoWindow = () => {
 
   render() {
     return (
-      <div className="container map-component-container">
+      <div className="container main-content-container">
         <div className="container list-view-container">
           <ListView
             google={this.props.google}
-            ref="listView"
             locations={this.props.locations}
             markersList={this.state.markers}
             markerPropsProp={this.state.markerProps}
@@ -228,15 +238,18 @@ closeInfoWindow = () => {
           <Map 
             // Consulted for setting `role` and `aria-role` for map: https://stackoverflow.com/a/49015889.
             role="application"
-            aria-label="Google Map showing markers for the locations of the best views in Seattle."
+            aria-label="Map with markers at locations of interest."
             google={this.props.google}
             onReady={this.onMapReady}
             onClick={this.onMapClicked}
-            style={this.props.mapStyles}
+            /* Styles created at https://mapstyle.withgoogle.com/ as suggested by a Udacity reviewer
+            * giving feedback on the first itteration of this projecdt.
+            */
+            styles={mapStyles}
             zoom={this.props.zoom}
             initialCenter={this.props.initialCenter}
+            mapTypeID="sattelite"
           >
-          
             <InfoWindow
               marker={this.state.activeMarker}
               visible={this.state.showingInfoWindow}
@@ -245,30 +258,34 @@ closeInfoWindow = () => {
             {this.state.activeMarkerProps ? (
               <div className="container infowindow-container">
                 <h2>{this.state.activeMarkerProps.name}</h2>
-                <img 
-                title={this.state.activeMarkerProps.name}
-                alt={this.state.activeMarkerProps.altText}
-                src={this.state.activeMarkerProps && this.state.activeMarkerProps.flikrImage}/>
-                <br></br>
-                <p className="infowindow-main-text">
-                  {this.state.activeMarkerProps.flikrImage ? (
-                    <p>
-                      Image fetched from <a href="https:www.flickr.com">Flickr</a>; posted by 
-                      <a 
-                      
-                      href={this.state.activeMarkerProps.firstImageOwnerPage}> this photographer.</a>
+                {this.state.activeMarkerProps.flikrImage ? (
+                  <div className="has-image-display" role="presentation"> 
+                    <img 
+                      title={this.state.activeMarkerProps.name}
+                      alt={this.state.activeMarkerProps.altText}
+                      src={this.state.activeMarkerProps && this.state.activeMarkerProps.flikrImage}/>
+                      <br></br>
+                      <p className="info-window-main-text">
+                        Image fetched from <a href="https:www.flickr.com">Flickr</a>; posted by 
+                        <a href={this.state.activeMarkerProps.firstImageOwnerPage}> this photographer.</a>
+                      </p>
+                  </div>
+                  ) : (
+                  <div className="no-image-display" role="presentation">
+                    <p className="info-window-main-text">
+                      No image matching our query for this location available at the moment.<br></br><br></br>
+                      ... get out there and take one? <br></br><br></br> ¯\_(ツ)_/¯📷🌆🏞️
                     </p>
-                  ) : <p>"No image matching our query for this location available at this moment."</p>
-                  }
-                  <p>
+                  </div>
+                  )}
+                  <p className="info-window-main-text">
                     As just one source of information about this place, you can check out 
                     <a href={this.state.activeMarkerProps && this.state.activeMarkerProps.website}> Seattle 
                     Park's and Recreation's page </a>about the site.
                   </p>
-                </p>
               </div>
-              ) : <p>"Unfortunately, we don't have any additional information about this location available at the moment.<br></br> 
-                If you are looking to learn more about this place, don't hesitate to send us a line. And check back soon!"</p>
+              ) : <p>Unfortunately, we don't have any additional information about this location available at the moment.<br></br> 
+                If you are looking to learn more about this place, don't hesitate to send us a line. And check back soon!</p>
             }
             </InfoWindow>
           </Map>
@@ -279,5 +296,4 @@ closeInfoWindow = () => {
   }
 }
  
-export default GoogleApiWrapper({
-  apiKey: GOOGLE_MAPS_API_KEY, LoadingContainer: NoMap})(LocationsDisplay)
+export default GoogleApiWrapper({apiKey: GOOGLE_MAPS_API_KEY, LoadingContainer: NoMap})(LocationsDisplay)

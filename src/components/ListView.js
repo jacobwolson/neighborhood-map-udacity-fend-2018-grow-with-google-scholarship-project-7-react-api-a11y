@@ -6,18 +6,16 @@
 
 import React, { Component } from 'react'
 import SelectMenu from './SelectMenu'
-// We are going with a stateless functional component here.
-// Source consulted: https://stackoverflow.com/a/28329640
-const ListView = (props) => {
+class ListView extends Component {
     render() {
         return(
             <section className="list-view-container">
                 <SelectMenu
-                    filterLocations={props.filterLocations}
+                    filterLocations={this.props.filterLocations}
                 />
                 <h3 tabIndex="0">Locations Displayed</h3>
                 <ul id="locations-list">
-                {props.markerPropsProp.map((markerProp, i) => {
+                {this.props.markerPropsProp.map((markerProp, i) => {
                     return <li
                                 // `aria-labelledby` attribute added to list items per a direct suggestion from a Udacity reviewer.
                                 aria-labelledby="locations-list"
@@ -25,7 +23,7 @@ const ListView = (props) => {
                             >
                                 <button 
                                     className="locations-list-button"
-                                    onClick={e => props.onClickLI(props.markerPropsProp[i], props.markersList[i])}>
+                                    onClick={e => this.props.onClickLI(this.props.markerPropsProp[i], this.props.markersList[i])}>
                                     {markerProp.name}
                                 </button>
                             </li>

@@ -1,25 +1,32 @@
 // React version = 16.6.3
 
-/* General sources consulted for working with working with Google maps and dynamically setting markers
-on a map in an API using React and `google-maps-react` include in particular:
-Rachel Njeri's article "React Apps with the Google Maps API and google-maps-react" found here: 
+/* General sources consulted for creating an SPA that incoroporates the Google Maps API using
+using React and with `google-maps-react`, which directly or indirectly influeced the content, 
+architecture and logic of my code throughout, include in particular:
+
+- Rachel Njeri's article "React Apps with the Google Maps API and google-maps-react" found here: 
 https://scotch.io/tutorials/react-apps-with-the-google-maps-api-and-google-maps-react;
-Ari Lerner's aricle    found here:
+- Ari Lerner's aricle "How to Write a Google Maps React Component," which also acts as 
+an introduction to google-maps-react, found here:
 https://www.fullstackreact.com/articles/how-to-write-a-google-maps-react-component/
-and Udacity Project Coach Doug Brown's Walkthrough for this project, found here:
+- Udacity Project Coach Doug Brown's Walkthrough for this project, found here:
  https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be.
 
- Additional sources are noted throughout the code were relevant.
+ Additional, particular, sources are noted throughout the code, adjescent to relevant lines
+ or blocks where possible, or at the top of files in which they were used as general references.
 
- Udacity's Front End Web Devlopment program, as funded by the Grow with Google scholarship, helped me 
- gain the knowledge and skills I needed to create this project, along with support and encouragment from
- fellow students and the wider programming community.
+ Udacity's 2018 Front End Web Devlopmer program, as funded by the Grow with Google scholarship, helped me 
+ gain much the knowledge and skills I needed to create this project, along with indispensible support, 
+ encouragment and insight from fellow students and the wider programming community.
+
+ MDN, reactjs.com and W3Schools were accessed for general reference througout the course of the project.
+
+ StackOverflow answers that directly impacted my code are noted throughout, in addition to the afformentioned.
  */
-
 
 import React, { Component } from 'react';
 import LocationsDisplay from './LocationsDisplay'
-import viewpoints from './data/viewpoints'
+import viewpoints from '../data/viewpoints'
 import sortBy from 'sort-by'
 
 const mapStyles = {
@@ -83,10 +90,10 @@ class App extends Component {
   render() {
     return (
       <main>
-        <div>
+        <div role="banner">
           <h1 tabIndex="0">Best Views Seattle Map</h1>
         </div>
-        <div className="container">
+        <div role="presentation" className="container locations-display-container">
           <LocationsDisplay
             locations={this.state.locations}
             mapStyles={mapStyles}
