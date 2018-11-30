@@ -4,7 +4,7 @@ Project seven of seven for Udacity's Front End Web Developer Nanodegree; complet
 
 ## Authors
 
-I — Jacob W. Olson — built this app from scratch based on my knowledge gained through Udacity's course and assistance, with knowledge and techniques from various sources noted throughout the code. 
+I — Jacob W. Olson — built this app from scratch based on my knowledge gained through Udacity's course and with assistance, knowledge and techniques from various sources noted throughout the code. 
 
 Project coach Doug Brown's walkthrough was also a particularly instructive resourse. As general overviews and outlines for creating a single page application with React incorporating Google Maps, articles by [Rachel Njeri](https://scotch.io/tutorials/react-apps-with-the-google-maps-api-and-google-maps-react) and [by Ari Lerner](https://www.fullstackreact.com/articles/how-to-write-a-google-maps-react-component/), as referenced in `LocationsDisplay.js`, were of great value and use. Many other sources that were invaluable are noted throughout the code. 
 
@@ -35,14 +35,14 @@ And there is no way I could have done it without the support of my fellow Grow w
 
     ![Clicking map markers.](gif/bvs-1.gif)
 
-- You can also click on the location names as they appear in the list below the filter to display the info window for the marker associated with the place name.
+- You can also click on location names as they appear in the list below the filter to display the info window for the marker associated with the place name.
 
 - Use the filter to select viewpoints by their position relative to Cal Anderson Park in Seattle's Capitol Hill neighborhood.
 
 
     ![Filtering the list and clicking list buttons.](gif/bvs-2.gif)
 
-- To check out some of the error handling build in to this application: 
+- To check out some of the error handling built in to this application: 
 
     - Disconnect from the internet and refresh the page: a custom error message made possible by [a custom loading container provided by google-maps-react](https://github.com/fullstackreact/google-maps-react/blob/master/README.md#automatically-lazy-loading-google-api), and as overviewed by Doug Brown in his walkthrough, will appear if the map does not load after two seconds.
 
@@ -54,7 +54,7 @@ And there is no way I could have done it without the support of my fellow Grow w
     ![Custom error message and altered info window display when unable to fetch image from Flickr API.](gif/bvs-4.gif)
 
 
-- This app was built with accessibility and responsive design in mind. You should be able to easily tab through the page and access elements using a keyboard or other assistive technologies, and folks using screen readers should be able to readily navigate the DOM organized with semantic markup and ARIA attributes. If you are interested in learning more about Accessibility Rich Internet Applications, you might find [this article](https://developer.mozilla.org/en-US/docs/Web/Accessibility/An_overview_of_accessible_web_applications_and_widgets) instructive. You can view the WAI-ARIA specification in full [here](https://www.w3.org/TR/wai-aria-1.1/).
+- This app was built with accessibility and responsive design in mind. You should be able to use the app on screen of all sizes. Moreover, you should be able to easily tab through the page and access elements using a keyboard or other assistive technologies, and folks using screen readers should be able to readily navigate the DOM organized with semantic markup and ARIA attributes. If you are interested in learning more about Accessibility Rich Internet Applications, you might find [this article](https://developer.mozilla.org/en-US/docs/Web/Accessibility/An_overview_of_accessible_web_applications_and_widgets) instructive. You can view the WAI-ARIA specification in full [here](https://www.w3.org/TR/wai-aria-1.1/).
 
 ## Dependencies
 
@@ -76,7 +76,7 @@ Sources for this application are noted throughout the files, as close to relevan
 
 ### List of Sources Cited
 
-In addition to Udacity's Front End Web Developer Nanodegree Program, 2018, and feedback provided by a Udacity reviewer for the first iteration of this  project, the following sources were instructive in the creation of this app and are cited throughout the code:
+In addition to Udacity's Front End Web Developer Nanodegree Program, 2018, and feedback provided by a Udacity reviewer for the first iteration of this project, the following sources were instructive in the creation of this app and are cited throughout the code:
 
 - https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be
 - https://scotch.io/tutorials/react-apps-with-the-google-maps-api-and-google-maps-react
