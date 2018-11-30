@@ -4,11 +4,11 @@ Project seven of seven for Udacity's Front End Web Developer Nanodegree; complet
 
 ## Authors
 
-I — Jacob W. Olson — built this app from scratch based on my knowledge gained through Udacity's course and assistance, knowledge and techniques from various sources noted throughout the code. 
+I — Jacob W. Olson — built this app from scratch based on my knowledge gained through Udacity's course and assistance, with knowledge and techniques from various sources noted throughout the code. 
 
-Project coach Doug Brown's walkthrough was also a particularly instructive resourse. As a general overviews and outlines for creating a single page application with React incorporating Google Maps, articles by [Rachel Njeri](https://scotch.io/tutorials/react-apps-with-the-google-maps-api-and-google-maps-react) and [by Ari Lerner](https://www.fullstackreact.com/articles/how-to-write-a-google-maps-react-component/), as referenced in `LocationsDisplay.js`, were of great value and use. Many other sources that were invaluable are noted throughout the code. 
+Project coach Doug Brown's walkthrough was also a particularly instructive resourse. As general overviews and outlines for creating a single page application with React incorporating Google Maps, articles by [Rachel Njeri](https://scotch.io/tutorials/react-apps-with-the-google-maps-api-and-google-maps-react) and [by Ari Lerner](https://www.fullstackreact.com/articles/how-to-write-a-google-maps-react-component/), as referenced in `LocationsDisplay.js`, were of great value and use. Many other sources that were invaluable are noted throughout the code. 
 
-And there is no way I could have done it without the support of my fellow Grow with Google scholars and the wider programming community. As I take the last step in my Grow with Google journey with Udacity, I feel certain I am just beginning a learning journey in tech along side a cohort of drvien scholars moving towards futures and a future that we have the power to help shape for the better.
+And there is no way I could have done it without the support of my fellow Grow with Google scholars and the wider programming community. As I take this last step in my Grow with Google journey with Udacity, I feel certain I am just beginning a learning journey in tech along side a cohort of driven scholars moving towards futures and a future that we have the power to help shape for the better.
 
 ## Getting the App Up and Running
 
