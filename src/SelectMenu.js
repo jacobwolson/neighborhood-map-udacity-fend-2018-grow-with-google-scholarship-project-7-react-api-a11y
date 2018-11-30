@@ -11,9 +11,10 @@ class SelectMenu extends Component {
 
     render() {
         return (
-            <div className="select-menu-container">
+            // Consulted for choice to assign "presentation" to role in lieu of "none": https://github.com/w3c/aria-practices/issues/515
+            <div role="presentation" className="select-menu-container">
                 <label tabIndex="0" className="filter-options-label" htmlFor="filter-options">Filter by Location</label>
-                <div>
+                <div role="presentation">
                     <select 
                         id="filter-options" 
                         onChange={() => {

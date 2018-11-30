@@ -1,7 +1,11 @@
 /* Project coach Doug Brown's walkthrough was consulted in the course of completing this project, and had 
-particular influnce on this component. 
+  particular influnce on this component. 
   https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be,
-  Steps 1 - 3, and the portion addressing turning on the service worker, were viewed, and were a source of inpriation for this code.
+  Step 1, addressing getting the map initially loaded to the page and storing data and loading it to the map, 
+  step 2, addressing loading markers to the map, storing marker data in state and connecting info windows with markers, 
+  and step 3, addressing loading data to info windows from an external API, and the sections on handling errors for the map 
+  and turning on the service worker, were viewed, and were a source of inpriation and instruction 
+  for my code, and a great learning resource as well.
 */
 
 /* Sources consulted for incorporating a Google map with dynamic markers in a React app using google-maps-react, general: 
@@ -26,11 +30,13 @@ import {Map, InfoWindow, GoogleApiWrapper} from 'google-maps-react'
 import ListView from './ListView'
 import NoMap from './NoMap'
 
+const GOOGLE_MAPS_API_KEY = "AIzaSyBvmvRFjknv-wc3F8y_SZc1WTy_rLRfW3o"
 const FLICKR_API_KEY = "2b6766fb0960cc8091819b49e304df4b"
 
 export class LocationsDisplay extends Component {
  
   state = {
+    noMapError: true,
     mapObject: null,
     markers: [],
     markerProps: [],
@@ -45,12 +51,10 @@ export class LocationsDisplay extends Component {
   onMapReady = (mapProps, map) => {
     this.setState({mapObject: map})
     this.updateMarkers(this.props.locations)
-    this.refs.listView.populateList()
   }
 
   componentDidUpdate() {
     this.updateMarkers(this.props.locations)
-    this.refs.listView.populateList()
   }
 
   /* `arraysMatch()` inspired by https://stackoverflow.com/a/16436975,
@@ -169,6 +173,8 @@ getFlickrImage = (props, marker) => {
     })
   })
   // Consulted for catching error: https://stackoverflow.com/a/51785817
+  /* App will both send an alert to users, and display a message in the info window, if
+  * it was not able to retrieve an image from Flikr.
   .catch(function(err) {
     alert("Unable to fetch any images from Flickr for this location at the moment.");
   });
@@ -219,7 +225,6 @@ closeInfoWindow = () => {
           />
         </div>
         <div className="container map-view-container">
-          <NoMap>
           <Map 
             // Consulted for setting `role` and `aria-role` for map: https://stackoverflow.com/a/49015889.
             role="application"
@@ -267,13 +272,12 @@ closeInfoWindow = () => {
             }
             </InfoWindow>
           </Map>
-          </NoMap>
-      </div>
+          ) 
+        </div>
       </div>
     );
   }
 }
  
 export default GoogleApiWrapper({
-  apiKey: 'AIzaSyBvmvRFjknv-wc3F8y_SZc1WTy_rLRfW3o'
-})(LocationsDisplay)
+  apiKey: GOOGLE_MAPS_API_KEY, LoadingContainer: NoMap})(LocationsDisplay)

@@ -1,49 +1,38 @@
+/* Doug Brown's walkthrough influeced my refactoring of this component: the general technique 
+    for dynamically creating the `li` inside the `return()` function -- rather than in a method that appends
+    the `li` in to the `ul` -- and the choice to add button elements inside of each `li` rather than create 
+    buttons out of the `li` in particular. 
+*/
+
 import React, { Component } from 'react'
 import SelectMenu from './SelectMenu'
-class ListView extends Component {
-    
-    markerPropsArray = []
-    markersArray = []
-
-    // Consulted for creating and adding new LI: https://www.w3schools.com/jsref/met_node_appendchild.asp
-    // Code for clearing list: https://stackoverflow.com/a/27324794
-    populateList = () => {
-        const listViewList = document.getElementById('list-view-list')
-        if (listViewList) {
-            listViewList.innerHTML = ''
-        
-            let clickLI = this.props.onClickLI
-            let i = 0;
-            let markerPropsList = this.props.markerPropsProp
-            let markersList = this.props.markersList
-            if (markerPropsList) {
-                markerPropsList.forEach(markerProp => {
-                    const newLI = document.createElement('li')
-                    newLI.key = markerProp.name
-                    newLI.innerHTML = markerProp.name
-                    newLI.tabIndex = 0
-                    newLI.role = "button"
-                    let associatedMarker = markersList[i]
-                    let associatedMarkerProps = markerPropsList[i]
-                    newLI.addEventListener('click', () => clickLI(associatedMarkerProps, associatedMarker))
-                    listViewList.appendChild(newLI)
-                    i++
-                })
-            }
-        }
-    }
-
+// We are going with a stateless functional component here.
+// Source consulted: https://stackoverflow.com/a/28329640
+const ListView = (props) => {
     render() {
         return(
-            <div className="list-view-container">
+            <section className="list-view-container">
                 <SelectMenu
-                    filterLocations={this.props.filterLocations}
+                    filterLocations={props.filterLocations}
                 />
-                <ul id="list-view-list">
-                {/* An appropriately filtered list of our locations will go here whenever the `.populateList()` method is invoked.
-                */}
+                <h3 tabIndex="0">Locations Displayed</h3>
+                <ul id="locations-list">
+                {props.markerPropsProp.map((markerProp, i) => {
+                    return <li
+                                // `aria-labelledby` attribute added to list items per a direct suggestion from a Udacity reviewer.
+                                aria-labelledby="locations-list"
+                                key={markerProp.name}
+                            >
+                                <button 
+                                    className="locations-list-button"
+                                    onClick={e => props.onClickLI(props.markerPropsProp[i], props.markersList[i])}>
+                                    {markerProp.name}
+                                </button>
+                            </li>
+                    })
+                }
                 </ul>
-            </div>
+            </section>
         )
     }
 }

@@ -1,4 +1,21 @@
-// Use of sort-by directly inspired by Udacity's React "Contacts App" lesson and example from the Front End Web Developer Nanodegree program, 2018.
+// React version = 16.6.3
+
+/* General sources consulted for working with working with Google maps and dynamically setting markers
+on a map in an API using React and `google-maps-react` include in particular:
+Rachel Njeri's article "React Apps with the Google Maps API and google-maps-react" found here: 
+https://scotch.io/tutorials/react-apps-with-the-google-maps-api-and-google-maps-react;
+Ari Lerner's aricle    found here:
+https://www.fullstackreact.com/articles/how-to-write-a-google-maps-react-component/
+and Udacity Project Coach Doug Brown's Walkthrough for this project, found here:
+ https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be.
+
+ Additional sources are noted throughout the code were relevant.
+
+ Udacity's Front End Web Devlopment program, as funded by the Grow with Google scholarship, helped me 
+ gain the knowledge and skills I needed to create this project, along with support and encouragment from
+ fellow students and the wider programming community.
+ */
+
 
 import React, { Component } from 'react';
 import LocationsDisplay from './LocationsDisplay'
@@ -24,10 +41,11 @@ class App extends Component {
   }
   
   componentDidMount() {
-    console.log(viewpoints)
+    // Use of sort-by directly inspired by Udacity's React "Contacts App" lesson and example from the Front End Web Developer Nanodegree program, 2018.
     viewpoints.sort(sortBy('name'))
     this.setState({locations: viewpoints})
-    if ('serviceworker' in navigator) { console.log('Client: service worker in navigator') }
+    if ('serviceworker' in navigator) { console.log('Client: service worker in navigator')
+    }
   }
 
   /* Filter option methods; passed through LocationsDisplay down to ListView component.
