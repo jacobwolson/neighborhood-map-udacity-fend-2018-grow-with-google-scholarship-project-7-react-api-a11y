@@ -4,11 +4,11 @@ Project seven of seven for Udacity's Front End Web Developer Nanodegree; complet
 
 ## Authors
 
-I — Jacob W. Olson — built this app from scratch based on my knowledge gained through Udacity's course and with assistance, knowledge and techniques from various sources noted throughout the code. 
+I — Jacob W. Olson — built this app from scratch based on my knowledge gained through Udacity's course and with assistance, knowledge and techniques from various sources noted throughout the code and discussed below.
 
-Project coach Doug Brown's walkthrough was also a particularly instructive resourse. As general overviews and outlines for creating a single page application with React incorporating Google Maps, articles by [Rachel Njeri](https://scotch.io/tutorials/react-apps-with-the-google-maps-api-and-google-maps-react) and [by Ari Lerner](https://www.fullstackreact.com/articles/how-to-write-a-google-maps-react-component/), as referenced in `LocationsDisplay.js`, were of great value and use. Many other sources that were invaluable are noted throughout the code. 
+In addition to the cited sources and Udacity's Front End Web Developer Nanodegree program, there is no way I could have completed this project without the support and encouragement of my fellow Grow with Google scholars and the wider programming community, all along my path of learning and in my work on this particular project as well. 
 
-And there is no way I could have done it without the support of my fellow Grow with Google scholars and the wider programming community. As I take this last step in my Grow with Google journey with Udacity, I feel certain I am just beginning a learning journey in tech along side a cohort of driven scholars moving towards futures and a future that we have the power to help shape for the better.
+As I take this last step in my Grow with Google experience with Udacity, I feel I have very real momentum and a new passion, and that I am only at the start of my learning journey in tech. And I know I am going forward along side a cohort of talented and driven scholars moving towards futures and a future that we have the power -- and that we are being empowered -- to help shape for the better.
 
 ## Getting the App Up and Running
 
@@ -72,11 +72,13 @@ To learn more about service workers, you may wish to read [this introduction](ht
 
 ## Sources 
 
-Sources for this application are noted throughout the files, as close to relevant peices of code as possible, and general or app-wide sources are also cited at the top of `app.js` and `LocationsDisplay.js` in particular.
+Udacity's Front End Web Developer Nanodegree program, 2018, was an immense source of knowledge and skills which I used to complete this project. Feedback from a Udacity reviewer on the first itteration of this project was also incorporated in to the current version.
 
-### List of Sources Cited
+Project coach Doug Brown's walkthrough was a particularly instructive resourse guiding me in the completion of this project. Furthermore, as general overviews and outlines for creating a single page application with React incorporating Google Maps, articles by [Rachel Njeri](https://scotch.io/tutorials/react-apps-with-the-google-maps-api-and-google-maps-react) and [by Ari Lerner](https://www.fullstackreact.com/articles/how-to-write-a-google-maps-react-component/), as referenced in `LocationsDisplay.js`, were of great value and use. 
 
-In addition to Udacity's Front End Web Developer Nanodegree Program, 2018, and feedback provided by a Udacity reviewer for the first iteration of this project, the following sources were instructive in the creation of this app and are cited throughout the code:
+Sources for this application are cited throughout the files, as close to relevant peices of code as possible, and app-wide sources are also discussed at the top of `App.js`. 
+
+#### List of sources cited:
 
 - https://www.youtube.com/watch?v=NVAVLCJwAAo&feature=youtu.be
 - https://scotch.io/tutorials/react-apps-with-the-google-maps-api-and-google-maps-react
