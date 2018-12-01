@@ -35,12 +35,11 @@ class NoMap extends Component {
     render() { 
         return(
             <div role="presentation" className="no-map-message-container">
-                {/*If `noMapError` hasn't gotten flipped to "false" yet*/}
                 {this.state.noMapError ? (
+                    
                     <h2 className="map-loading-message">
                         Loading map...
                     </h2>
-                {/*If `.showErrorMessage()` has flipped 'noMapError` to false*/}    
                 ) : (
                     <h3 className="map-load-error-message">
                         There was an error loading the map.<br></br><br></br>
