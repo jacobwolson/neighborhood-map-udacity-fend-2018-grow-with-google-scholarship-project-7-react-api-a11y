@@ -36,10 +36,11 @@ class NoMap extends Component {
         return(
             <div role="presentation" className="no-map-message-container">
                 {this.state.noMapError ? (
-                    
+                    // If `noMapError` hasn't gotten flipped to "false" yet.
                     <h2 className="map-loading-message">
                         Loading map...
                     </h2>
+                    // If `.showErrorMessage()` has flipped 'noMapError` to false.  
                 ) : (
                     <h3 className="map-load-error-message">
                         There was an error loading the map.<br></br><br></br>
