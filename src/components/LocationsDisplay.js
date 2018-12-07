@@ -61,7 +61,6 @@ export class LocationsDisplay extends Component {
      http://code.flickr.net/2008/08/19/standard-photos-response-apis-for-civilized-age/
   */
   arraysMatch(array1, array2) {
-    if (array1 == null || array2 == null) return null
     if (array1.length !== array2.length) return null
     let i = 0
     let testArray = []
@@ -84,7 +83,7 @@ export class LocationsDisplay extends Component {
     let markerPropsTemp = []
     let markersTemp = []
     
-    // Create and store an object containing the 
+    // Create and store an object containing the props for each location's marker
     locations.forEach((location, i) => {
       let theseMarkerProps = {
         name: location.name,
