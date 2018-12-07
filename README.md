@@ -2,13 +2,15 @@
 
 Project seven of seven for Udacity's Front End Web Developer Nanodegree; completed as part of the Grow with Google Scholarship program, 2018.
 
+The goal of this project was to practice building a single page web application using the React JavaScript library while utilizing the Google Maps API along with a third-party API for fetching data about specific locations on the map. The project also required students to implement accesiblity features and responsive design.
+
 ## Authors
 
-I — Jacob W. Olson — built this app from scratch based on my knowledge gained through Udacity's course and with assistance, knowledge and techniques from various sources noted throughout the code and discussed below.
+I — Jacob W. Olson — built this app from scratch based on knowledge and skills gained through Udacity's Front End Web Developer course supplemented by the wealth of reasources available on the web, and by utilizing knowledge and techniques from various particular sources noted throughout the code and discussed below.
 
 In addition to the cited sources and Udacity's Front End Web Developer Nanodegree program, there is no way I could have completed this project without the support and encouragement of my fellow Grow with Google scholars and the wider programming community, all along my path of learning and in my work on this particular project as well. 
 
-As I take this last step in my Grow with Google experience with Udacity, I feel I have very real momentum and a new passion, and that I am only at the start of my learning journey in tech. And I know I am going forward along side a cohort of talented and driven scholars moving towards futures and a future that we have the power -- and that we are being empowered -- to help shape for the better.
+As I take this last step in my Grow with Google experience with Udacity, I feel I have very real momentum and a new passion, and that I am only at the start of my learning journey in tech. And I know I am going forward alongside a cohort of talented and driven scholars moving towards futures and a future that we have the power -- and that we are being empowered -- to help shape for the better.
 
 ## Getting the App Up and Running
 
@@ -31,14 +33,13 @@ As I take this last step in my Grow with Google experience with Udacity, I feel 
 
 ## Check out the App
 
-- Click on map markers to see details about each viewpoint, including an asynchronosly fetched image associated with the location from Flickr, a link to the account that uploaded the image, and a link to the Seattle Parks and Recreation page for the location.
+- Click on map markers to see details about each viewpoint, including an asynchronously fetched image associated with the location from Flickr, a link to the account that uploaded the image, and a link to the Seattle Parks and Recreation page for the location.
 
     ![Clicking map markers.](gif/bvs-1.gif)
 
 - You can also click on location names as they appear in the list below the filter to display the info window for the marker associated with the place name.
 
 - Use the filter to select viewpoints by their position relative to Cal Anderson Park in Seattle's Capitol Hill neighborhood.
-
 
     ![Filtering the list and clicking list buttons.](gif/bvs-2.gif)
 
@@ -53,8 +54,7 @@ As I take this last step in my Grow with Google experience with Udacity, I feel 
 
     ![Custom error message and altered info window display when unable to fetch image from Flickr API.](gif/bvs-4.gif)
 
-
-- This app was built with accessibility and responsive design in mind. You should be able to use the app on screen of all sizes. Moreover, you should be able to easily tab through the page and access elements using a keyboard or other assistive technologies, and folks using screen readers should be able to readily navigate the DOM organized with semantic markup and ARIA attributes. If you are interested in learning more about Accessibility Rich Internet Applications, you might find [this article](https://developer.mozilla.org/en-US/docs/Web/Accessibility/An_overview_of_accessible_web_applications_and_widgets) instructive. You can view the WAI-ARIA specification in full [here](https://www.w3.org/TR/wai-aria-1.1/).
+- This app was built with accessibility and responsive design in mind. You should be able to use the app on screens of all sizes. Moreover, you should be able to easily tab through the page and access elements using a keyboard or other assistive technologies and folks using screen readers should be able to readily navigate the DOM, which is organized with semantic markup and ARIA attributes. If you are interested in learning more about Accessibility Rich Internet Applications, you might find [this article] (https://developer.mozilla.org/en-US/docs/Web/Accessibility/An_overview_of_accessible_web_applications_and_widgets) instructive. You can view the WAI-ARIA specification in full [here](https://www.w3.org/TR/wai-aria-1.1/).
 
 ## Dependencies
 
@@ -64,19 +64,19 @@ As I take this last step in my Grow with Google experience with Udacity, I feel 
 
 ## About the Service Worker
 
-The service worker for this app came baked-in courtesy of create-react-app, and is flipped to `.register()` in `index.js`. Following the instructions above, however, you will be looking at the app in developer mode, which means the service worker will not be actively providing offline functionality. 
+The service worker for this app came baked-in courtesy of create-react-app and is flipped to `.register()` in `index.js`. Following the instructions above, however, you will be looking at the app in developer mode, which means the service worker will not be actively providing offline functionality. 
 
-If this app were running in production mode, however, the service worker would be in action helping the app run as many featueres as possible when internet connecitivity is not available.
+If this app were running in production mode the service worker would be in action helping the app run as many features as possible when internet connectivity is not available.
 
-To learn more about service workers, you may wish to read [this introduction](https://developers.google.com/web/ilt/pwa/introduction-to-service-worker) on the Google Developers website.
+To learn more about service workers you may wish to read [this introduction] (https://developers.google.com/web/ilt/pwa/introduction-to-service-worker) on the Google Developers website.
 
 ## Sources 
 
-Udacity's Front End Web Developer Nanodegree program, 2018, was an immense source of knowledge and skills which I used to complete this project. Feedback from a Udacity reviewer on the first itteration of this project was also incorporated in to the current version.
+Udacity's Front End Web Developer Nanodegree program, 2018, was an immense source of knowledge and skills which I used to complete this project. Feedback from a Udacity reviewer on the first iteration of this project was also incorporated in to the current version.
 
-Project coach Doug Brown's walkthrough was a particularly instructive resourse guiding me in the completion of this project. Furthermore, as general overviews and outlines for creating a single page application with React incorporating Google Maps, articles by [Rachel Njeri](https://scotch.io/tutorials/react-apps-with-the-google-maps-api-and-google-maps-react) and [by Ari Lerner](https://www.fullstackreact.com/articles/how-to-write-a-google-maps-react-component/), as referenced in `LocationsDisplay.js`, were of great value and use. 
+Project coach Doug Brown's walkthrough was a particularly instructive resource for me in the completion of this project. Furthermore, as general overviews and outlines for creating a single page application with React incorporating Google Maps, articles by [Rachel Njeri](https://scotch.io/tutorials/react-apps-with-the-google-maps-api-and-google-maps-react) and [by Ari Lerner](https://www.fullstackreact.com/articles/how-to-write-a-google-maps-react-component/), as referenced in `LocationsDisplay.js`, were of great value and use. 
 
-Sources for this application are cited throughout the files, as close to relevant peices of code as possible, and app-wide sources are also discussed at the top of `App.js`. 
+Sources for this application are cited throughout the files, as close to relevant pieces of code as possible, and app-wide sources are also discussed at the top of `App.js`. 
 
 #### List of sources cited:
 
@@ -117,7 +117,6 @@ Sources for this application are cited throughout the files, as close to relevan
 - https://css-tricks.com/snippets/css/a-guide-to-flexbox/
 - https://color.adobe.com/gold-color-scheme-burnt-orange-color-palette-color-theme-9841276/
 - https://www.w3.org/Style/Examples/007/center.en.html 
-
 
 ## Information Included by create-react-app with this Build:
 
@@ -171,3 +170,4 @@ Thanks for checking out my project! I hope you enjoyed it.
 As always, comments, feedback, suggestions and requests for collaboration are most welcome. 
 
         - Jacob W. Olson
+
