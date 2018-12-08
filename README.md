@@ -117,7 +117,7 @@ Sources for this application are cited throughout the files, as close to relevan
 - https://css-tricks.com/snippets/css/a-guide-to-flexbox/
 - https://color.adobe.com/gold-color-scheme-burnt-orange-color-palette-color-theme-9841276/
 - https://www.w3.org/Style/Examples/007/center.en.html 
-
+- http://2ality.com/2013/10/typeof-null.html
 ## Information Included by create-react-app with this Build:
 
             This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

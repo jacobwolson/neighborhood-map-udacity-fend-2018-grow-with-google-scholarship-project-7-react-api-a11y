@@ -51,7 +51,7 @@ export class LocationsDisplay extends Component {
     this.updateMarkers(this.props.locations)
   }
 
-  /* `arraysMatch()` inspired by https://stackoverflow.com/a/16436975,
+  /* `arraysMatchCaseSpecific()` and `arraysMatch()` -inspired by https://stackoverflow.com/a/16436975,
      and modified to accomodate for arrays containing objects.
     Also consulted for creating this helper function: 
     https://stackoverflow.com/a/14853974
@@ -60,23 +60,94 @@ export class LocationsDisplay extends Component {
      https://www.flickr.com/services/api/misc.urls.html
      http://code.flickr.net/2008/08/19/standard-photos-response-apis-for-civilized-age/
   */
-  arraysMatch(array1, array2) {
+
+  /* This is the original function that was used to test if arrays in question matched,
+  * which is designed to work for comparing the extisting "markerProps" state
+  * and the incoming marker props-- ie "makerPropsTemp" -- in `updateMarkers()` below,
+  * in particular.
+  */
+  // arraysMatchCaseSpecific(array1, array2) {
+  //   if (array1.length !== array2.length) return null
+  //   let i = 0
+  //   let testArray = []
+  //   array1.forEach(item => {
+  //     if (item.name === array2[i].name) {
+  //       testArray.push("match")
+  //     }
+  //     i++
+  //   })
+  //   if (testArray.length === array2.length) {
+  //     return true 
+  //   } else {
+  //     return null
+  //   }
+  // }
+
+  /* This is a  more robust function created for checking if arrays are exact matches 
+  * designed to work for any two arrays with containing any data types and nested datatypes 
+  * available in JavaScript. Function leverages recursion.
+  */
+  arraysMatch = (array1, array2) => {
     if (array1.length !== array2.length) return null
     let i = 0
     let testArray = []
-    array1.forEach(item => {
-      if (item.name === array2[i].name) {
-        testArray.push("match")
+    let item2
+    array1.forEach(item1 => {
+      item2 = array2[i]
+      if (typeof(item1) === 'object') {
+        if (typeof(item2) === 'object') {
+          // Since `typeof(null) === "object"`; some history on why so here: http://2ality.com/2013/10/typeof-null.html.
+          if (item1 === null && item2 === null) {
+            testArray.push("match")
+          } else {
+            const keys1 = Object.keys(item1)
+            const keys2 = Object.keys(item2)
+            const keysMatch = this.arraysMatch(keys1, keys2)
+            if (keysMatch) {
+              const values1 = keys1.map(key => item1.key)
+              const values2 = keys2.map(key => item2.key)
+              const valuesMatch = this.arraysMatch(values1, values2)
+              if (valuesMatch) {
+                testArray.push("match")
+              } else {
+                return null
+              }
+            } else {
+              return null
+            } 
+          } 
+        // If `item2` is not also an object, return null.
+        } else {
+          return null
+        }
+      } else if (typeof(item1) === 'array') {
+        if (typeof(item2) === 'array') {
+          const arraysMatch = this.arraysMatch(item1, item2)
+          if (arraysMatch) {
+            testArray.push("match")
+          } else {
+            return null
+          }
+        } else {
+          return null
+        }
+      } else {
+        if (item1 === item2) {
+          testArray.push("match")
+        // If `item2` is not also an array, return null.
+        } else {
+          return null
+        }
       }
       i++
     })
     if (testArray.length === array2.length) {
-      return true 
+      return true
     } else {
       return null
     }
   }
-
+  
   /* Particular credit to Doug Brown here for helping inspire this method, including the technique
   of creating marker props and maker object to store in state for later use. */
   updateMarkers = (locations) => {
