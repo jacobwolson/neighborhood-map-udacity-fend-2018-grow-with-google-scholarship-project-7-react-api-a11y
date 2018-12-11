@@ -102,12 +102,13 @@ export class LocationsDisplay extends Component {
           } else {
             const keys1 = Object.keys(item1)
             const keys2 = Object.keys(item2)
-            const keysMatch = this.arraysMatch(keys1, keys2)
-            if (keysMatch) {
-              const values1 = keys1.map(key => item1.key)
-              const values2 = keys2.map(key => item2.key)
-              const valuesMatch = this.arraysMatch(values1, values2)
-              if (valuesMatch) {
+            if (keys1.length !== keys2.length) {
+              return null
+            }
+            if (this.arraysMatch(keys1, keys2)) {
+              const values1 = Object.values(item1)
+              const values2 = Object.values(item2)
+              if (this.arraysMatch(values1, values2)) {
                 testArray.push("match")
               } else {
                 return null
@@ -117,24 +118,14 @@ export class LocationsDisplay extends Component {
             } 
           } 
         // If `item2` is not also an object, return null.
-        } else {
+        } 
+        else {
           return null
         }
-      } else if (typeof(item1) === 'array') {
-        if (typeof(item2) === 'array') {
-          const arraysMatch = this.arraysMatch(item1, item2)
-          if (arraysMatch) {
-            testArray.push("match")
-          } else {
-            return null
-          }
-        } else {
-          return null
-        }
+      // If item1 is not an object, simply see if it is equal to item2.
       } else {
         if (item1 === item2) {
           testArray.push("match")
-        // If `item2` is not also an array, return null.
         } else {
           return null
         }
@@ -148,6 +139,7 @@ export class LocationsDisplay extends Component {
     }
   }
   
+
   /* Particular credit to Doug Brown here for helping inspire this method, including the technique
   of creating marker props and maker object to store in state for later use. */
   updateMarkers = (locations) => {

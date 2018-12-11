@@ -118,6 +118,7 @@ Sources for this application are cited throughout the files, as close to relevan
 - https://color.adobe.com/gold-color-scheme-burnt-orange-color-palette-color-theme-9841276/
 - https://www.w3.org/Style/Examples/007/center.en.html 
 - http://2ality.com/2013/10/typeof-null.html
+- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Indexed_collections_Arrays_and_typed_Arrays
 ## Information Included by create-react-app with this Build:
 
             This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
