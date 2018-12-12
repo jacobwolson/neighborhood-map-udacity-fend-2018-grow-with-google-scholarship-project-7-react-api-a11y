@@ -60,6 +60,7 @@ As I take this last step in my Grow with Google experience with Udacity, I feel 
 
 - [creat-react-app](https://github.com/facebook/create-react-app)
 - [google-maps-react](https://github.com/fullstackreact/google-maps-react)
+- [lodash](https://lodash.com/)
 - [sort-by](https://www.npmjs.com/package/sort-by)
 
 ## About the Service Worker
