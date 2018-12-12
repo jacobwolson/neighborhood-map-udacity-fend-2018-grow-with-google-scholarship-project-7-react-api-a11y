@@ -20,6 +20,7 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Cond
 
 import React, { Component } from 'react'
 import {Map, InfoWindow, GoogleApiWrapper} from 'google-maps-react'
+// Consulted for importing and using single module from lodash: https://stackoverflow.com/a/43479515
 import isEqual from 'lodash.isequal'
 import ListView from './ListView'
 import NoMap from './NoMap'
